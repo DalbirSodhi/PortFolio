@@ -1070,10 +1070,14 @@ body {
 }
 
 /* =========================================================
-   HERO SKILL CARDS — CONTINUOUS ORBIT
-   Added after the UI/UX refinements so these rules override
-   the earlier static skill-node positions.
+   FINAL HERO ORBIT + MOBILE UX FIX
+   Keep this block LAST in the stylesheet.
    ========================================================= */
+
+
+/* ---------------------------------------------------------
+   HERO SKILL ORBIT
+   --------------------------------------------------------- */
 
 .hero-visual {
   --skill-orbit-radius: 245px;
@@ -1083,11 +1087,6 @@ body {
   place-items: center;
 }
 
-/*
-  Each card begins at the visual centre, then travels around
-  the portrait. The final counter-rotation keeps the card
-  itself upright while it moves.
-*/
 .skill-node {
   min-width: 145px;
   padding: 14px 18px;
@@ -1107,7 +1106,7 @@ body {
   border: 1px solid rgba(79, 70, 229, 0.16);
   border-radius: 15px;
 
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.95);
 
   box-shadow:
     0 14px 35px rgba(48, 61, 100, 0.10);
@@ -1130,28 +1129,10 @@ body {
   letter-spacing: -0.01em;
 }
 
-/*
-  Start close to the original four-corner composition:
-  Frontend + Mobile  -> upper-left
-  Backend APIs       -> upper-right
-  System Design      -> lower-left
-  Cloud + AI         -> lower-right
-*/
-.node-mobile {
-  animation-delay: -17.5s;
-}
-
-.node-backend {
-  animation-delay: -24.5s;
-}
-
-.node-cloud {
-  animation-delay: -10.5s;
-}
-
-.node-ai {
-  animation-delay: -3.5s;
-}
+.node-mobile { animation-delay: -17.5s; }
+.node-backend { animation-delay: -24.5s; }
+.node-cloud { animation-delay: -10.5s; }
+.node-ai { animation-delay: -3.5s; }
 
 @keyframes skillOrbit {
   0% {
@@ -1196,7 +1177,10 @@ body {
 }
 
 
-/* Medium screens */
+/* ---------------------------------------------------------
+   TABLET REFINEMENT
+   --------------------------------------------------------- */
+
 @media (max-width: 1200px) {
   .hero-visual {
     --skill-orbit-radius: 215px;
@@ -1213,30 +1197,816 @@ body {
 }
 
 
-/* Phones */
+/* ---------------------------------------------------------
+   MOBILE UX — PRIMARY FIX
+   --------------------------------------------------------- */
+
 @media (max-width: 760px) {
+
+  :root {
+    --mobile-gutter: 20px;
+  }
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  /*
+    Keep content centered with a consistent mobile gutter.
+  */
+  .section-shell {
+    width: calc(100% - (var(--mobile-gutter) * 2));
+    max-width: none;
+    margin-inline: auto;
+  }
+
+
+  /* ---------------- NAV ---------------- */
+
+  .nav-wrap {
+    top: 10px;
+    left: 50%;
+    right: auto;
+
+    width: calc(100% - 24px);
+    max-width: none;
+
+    height: 66px;
+    padding: 0 14px 0 18px;
+
+    grid-template-columns: 1fr auto;
+
+    transform: translateX(-50%);
+
+    border-radius: 20px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+
+  .brand-name {
+    font-size: 1.02rem;
+    line-height: 1.05;
+  }
+
+  .brand-role {
+    display: none;
+  }
+
+  .availability {
+    display: none;
+  }
+
+  .menu {
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.96);
+  }
+
+  .menu span {
+    width: 18px;
+    height: 2px;
+  }
+
+  .nav {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: 75px;
+
+    padding: 10px 14px;
+
+    display: grid;
+    gap: 0;
+
+    border: 1px solid var(--line);
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.98);
+
+    box-shadow: var(--shadow);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-8px);
+
+    transition:
+      opacity .2s ease,
+      visibility .2s ease,
+      transform .2s ease;
+  }
+
+  .nav.nav-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .nav a {
+    padding: 15px 8px;
+
+    border-bottom: 1px solid var(--line);
+
+    font-size: 0.94rem;
+  }
+
+  .nav a::after {
+    display: none;
+  }
+
+  .nav a:last-child {
+    border-bottom: 0;
+  }
+
+
+  /* ---------------- HERO ---------------- */
+
+  .hero {
+    min-height: auto;
+
+    padding-top: 112px;
+    padding-bottom: 54px;
+
+    grid-template-columns: 1fr;
+
+    gap: 34px;
+  }
+
+  .hero-copy {
+    max-width: 100%;
+  }
+
+  .hero .eyebrow {
+    font-size: 0.70rem;
+    line-height: 1.25;
+  }
+
+  .hero-title {
+    max-width: 100%;
+
+    margin: 18px 0 20px;
+
+    font-size: clamp(3.1rem, 15vw, 4.65rem);
+
+    line-height: 0.91;
+
+    letter-spacing: -0.06em;
+  }
+
+  .hero-lede {
+    max-width: 100%;
+
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .hero-actions {
+    margin-top: 26px;
+
+    display: grid;
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .button {
+    width: 100%;
+    min-height: 48px;
+
+    font-size: 0.84rem;
+  }
+
+  .social-row {
+    margin-top: 18px;
+
+    flex-wrap: wrap;
+  }
+
+  .source-link {
+    flex-basis: 100%;
+    margin-top: 4px;
+  }
+
+
+  /* Mobile portrait visual */
+
   .hero-visual {
-    --skill-orbit-radius: 170px;
-    height: 430px;
+    --skill-orbit-radius: 158px;
+
+    width: 100%;
+    height: 410px;
+
+    margin-top: 4px;
+  }
+
+  .hero-card {
+    width: 218px;
+
+    padding: 8px;
+
+    border-radius: 20px;
+  }
+
+  .portrait-frame {
+    height: 258px;
+
+    border-radius: 15px;
+  }
+
+  .hero-card-meta {
+    padding: 10px 3px 3px;
+
+    font-size: 0.46rem;
+  }
+
+  .orbit-a {
+    width: 286px;
+    height: 286px;
+  }
+
+  .orbit-b {
+    width: 342px;
+    height: 342px;
+  }
+
+  .hero-visual::before {
+    width: 300px;
+    height: 300px;
   }
 
   .skill-node {
-    min-width: 102px;
-    padding: 10px 11px;
+    min-width: 96px;
+
+    padding: 9px 10px;
+
     border-radius: 11px;
   }
 
   .skill-node span {
-    font-size: 0.58rem;
+    font-size: 0.55rem;
+  }
+
+  .hero-bottom {
+    position: static;
+
+    grid-column: 1 / -1;
+
+    margin-top: -6px;
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px 10px;
+
+    font-size: 0.65rem;
+  }
+
+
+  /* ---------------- MARQUEE ---------------- */
+
+  .marquee span {
+    height: 48px;
+
+    padding-inline: 15px;
+
+    gap: 15px;
+
+    font-size: 0.65rem;
+  }
+
+
+  /* ---------------- SECTION HEADERS ----------------
+     Critical fix for the overlap shown in screenshots.
+  */
+
+  .section-heading,
+  .section-heading.compact {
+    padding-top: 70px;
+    padding-bottom: 28px;
+
+    display: grid;
+
+    grid-template-columns: 1fr !important;
+
+    gap: 18px !important;
+
+    align-items: start;
+  }
+
+  .section-heading > div,
+  .section-heading > p {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .section-heading .eyebrow {
+    font-size: 0.72rem;
+    line-height: 1.18;
+  }
+
+  .section-heading h2 {
+    max-width: 100%;
+
+    margin-top: 12px;
+
+    font-size: clamp(2.65rem, 13vw, 3.8rem);
+
+    line-height: 0.96;
+
+    letter-spacing: -0.055em;
+
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .section-heading > p {
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 0.94rem;
+    line-height: 1.62;
+  }
+
+
+  /* ---------------- PROJECT FILTERS ---------------- */
+
+  .filter-row {
+    width: calc(100vw - var(--mobile-gutter));
+
+    margin-right: calc(var(--mobile-gutter) * -1);
+    margin-bottom: 22px;
+
+    padding-right: var(--mobile-gutter);
+    padding-bottom: 4px;
+
+    display: flex;
+    flex-wrap: nowrap;
+
+    gap: 8px;
+
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-row button {
+    flex: 0 0 auto;
+
+    min-height: 42px;
+
+    padding: 9px 17px;
+
+    font-size: 0.74rem;
+  }
+
+
+  /* ---------------- PROJECT CARDS ---------------- */
+
+  .project-grid {
+    grid-template-columns: 1fr;
+
+    gap: 16px;
+  }
+
+  .project-card {
+    width: 100%;
+
+    border-radius: 18px;
+  }
+
+  .project-art {
+    height: 150px;
+  }
+
+  .project-card-body {
+    padding: 18px;
+  }
+
+  .project-categories {
+    font-size: 0.61rem;
+  }
+
+  .project-card h3 {
+    margin: 10px 0 5px;
+
+    font-size: 1.65rem;
+    line-height: 1;
+
+    letter-spacing: -0.04em;
+  }
+
+  .project-subtitle {
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  .project-description {
+    min-height: 0;
+
+    margin: 12px 0 15px;
+
+    font-size: 0.84rem;
+    line-height: 1.55;
+
+    -webkit-line-clamp: 3;
+  }
+
+  .tag-row {
+    gap: 5px;
+  }
+
+  .tag-row span {
+    padding: 6px 8px;
+
+    font-size: 0.61rem;
+  }
+
+  .project-actions {
+    margin-top: 15px;
+    padding-top: 13px;
+  }
+
+  .project-link,
+  .project-toggle {
+    font-size: 0.72rem;
+  }
+
+  .project-role {
+    font-size: 0.68rem;
+
+    flex-direction: column;
+
+    gap: 5px;
+  }
+
+  .project-role b {
+    text-align: left;
+  }
+
+  .project-extra ul {
+    font-size: 0.76rem;
+    line-height: 1.55;
+  }
+
+
+  /* Make complex artwork fit narrow cards */
+
+  .art-marketplace .market-one {
+    left: 30px;
+  }
+
+  .art-marketplace .market-two {
+    left: 105px;
+  }
+
+  .market-auth {
+    right: 16px;
+  }
+
+  .cloud-flow {
+    left: 12px;
+    right: 12px;
+
+    gap: 3px;
+  }
+
+  .cloud-flow div {
+    height: 42px;
+
+    padding: 5px;
+
+    font-size: 0.43rem;
+  }
+
+  .cloud-flow i {
+    font-size: 0.55rem;
+  }
+
+  .token-a {
+    left: 12px;
+  }
+
+  .token-b {
+    right: 12px;
+  }
+
+
+  /* ---------------- MORE GITHUB ---------------- */
+
+  .github-more {
+    margin-top: 42px;
+    padding-top: 28px;
+  }
+
+  .github-more-heading {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .github-more-heading h3 {
+    font-size: 1.7rem;
+  }
+
+  .repo-strip {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+  }
+
+  .repo-card {
+    min-height: 145px;
+
+    padding: 15px;
+  }
+
+  .repo-card h4 {
+    margin: 14px 0 6px;
+
+    font-size: 1rem;
+  }
+
+  .repo-card p {
+    font-size: 0.66rem;
+  }
+
+
+  /* ---------------- STACK ---------------- */
+
+  .stack {
+    padding-bottom: 76px;
+  }
+
+  .capability-grid {
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+  }
+
+  .capability-card {
+    min-height: 0;
+
+    padding: 20px;
+
+    border-radius: 18px;
+  }
+
+  .capability-top {
+    font-size: 0.63rem;
+  }
+
+  .capability-card h3 {
+    margin: 34px 0 10px;
+
+    font-size: 1.65rem;
+    line-height: 1.05;
+  }
+
+  .capability-card > p {
+    font-size: 0.85rem;
+    line-height: 1.62;
+  }
+
+  .capability-card .tag-row {
+    margin-top: 18px;
+    padding-top: 0;
+  }
+
+
+  /* ---------------- JOURNEY ---------------- */
+
+  .journey-inner {
+    padding-block: 76px;
+
+    grid-template-columns: 1fr;
+
+    gap: 36px;
+  }
+
+  .journey-heading {
+    position: static;
+  }
+
+  .journey-heading h2 {
+    margin: 12px 0 16px;
+
+    font-size: clamp(2.65rem, 12vw, 3.65rem);
+
+    line-height: 0.98;
+  }
+
+  .journey-heading > p:last-child {
+    max-width: 100%;
+
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .timeline-item {
+    min-height: 0;
+
+    padding: 23px 0;
+  }
+
+  .timeline-item div > p {
+    font-size: 0.62rem;
+  }
+
+  .timeline-item h3 {
+    font-size: 1.65rem;
+  }
+
+  .timeline-item b {
+    font-size: 0.78rem;
+  }
+
+  .timeline-item div > span {
+    margin-top: 13px;
+
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+
+
+  /* ---------------- ABOUT ---------------- */
+
+  .about {
+    padding-block: 76px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+
+    gap: 22px;
+  }
+
+  .about-heading h2 {
+    margin-top: 12px;
+
+    font-size: clamp(2.65rem, 12vw, 3.65rem);
+
+    line-height: 0.98;
+  }
+
+  .about-copy {
+    padding-top: 0;
+  }
+
+  .about-copy .about-lede {
+    font-size: 1.1rem;
+    line-height: 1.48;
+  }
+
+  .about-copy p {
+    font-size: 0.9rem;
+    line-height: 1.68;
+  }
+
+  .principle-strip {
+    margin-top: 34px;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .principle-strip div {
+    min-height: 72px;
+
+    padding: 13px;
+  }
+
+  .principle-strip b {
+    font-size: 0.72rem;
+  }
+
+
+  /* ---------------- CONTACT ---------------- */
+
+  .contact {
+    min-height: 680px;
+  }
+
+  .contact-inner {
+    padding-top: 68px;
+  }
+
+  .contact h2 {
+    margin: 14px 0 20px;
+
+    max-width: 100%;
+
+    font-size: clamp(3rem, 14vw, 4.55rem);
+
+    line-height: 0.91;
+  }
+
+  .contact-inner > p:not(.eyebrow) {
+    max-width: 100%;
+
+    font-size: 0.9rem;
+  }
+
+  .contact-actions {
+    display: grid;
+  }
+
+  .contact footer {
+    top: auto;
+    bottom: 0;
+
+    min-height: 128px;
+
+    padding-block: 18px;
+
+    grid-template-columns: 1fr auto;
+
+    gap: 10px 18px;
+  }
+
+  .footer-links {
+    justify-self: end;
+
+    gap: 12px;
+  }
+
+  .contact footer > span:last-child {
+    grid-column: 1 / -1;
+
+    justify-self: start;
   }
 }
 
 
-/*
-  Respect reduced-motion preferences without stacking all
-  four labels on top of one another.
-*/
+/* Extra-small phones */
+@media (max-width: 390px) {
+
+  :root {
+    --mobile-gutter: 16px;
+  }
+
+  .hero-title {
+    font-size: clamp(2.9rem, 15vw, 4rem);
+  }
+
+  .hero-visual {
+    --skill-orbit-radius: 145px;
+  }
+
+  .hero-card {
+    width: 204px;
+  }
+
+  .portrait-frame {
+    height: 242px;
+  }
+
+  .skill-node {
+    min-width: 90px;
+
+    padding: 8px;
+  }
+
+  .skill-node span {
+    font-size: 0.51rem;
+  }
+
+  .section-heading h2 {
+    font-size: clamp(2.45rem, 12.5vw, 3.3rem);
+  }
+
+  .repo-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
+
   .skill-node {
     animation: none !important;
   }

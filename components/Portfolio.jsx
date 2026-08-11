@@ -23,15 +23,50 @@ const LinkedInIcon = () => (
 
 function AmbientCursor() {
   useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) {
+      return undefined;
+    }
+
     const root = document.documentElement;
+
     const move = (event) => {
       root.style.setProperty('--mx', `${event.clientX}px`);
       root.style.setProperty('--my', `${event.clientY}px`);
     };
+
     window.addEventListener('pointermove', move, { passive: true });
+
     return () => window.removeEventListener('pointermove', move);
   }, []);
+
   return null;
+}
+
+function useReplayReveal(selector, refreshKey = null) {
+  useEffect(() => {
+    const elements = document.querySelectorAll(selector);
+
+    if (!elements.length) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const shouldShow = entry.intersectionRatio >= 0.16;
+          entry.target.classList.toggle('visible', shouldShow);
+        });
+      },
+      {
+        threshold: [0, 0.16],
+        rootMargin: '-2% 0px -6% 0px'
+      }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, [selector, refreshKey]);
 }
 
 function Nav() {
@@ -49,7 +84,6 @@ function Nav() {
     <header className="nav-wrap">
       <a className="brand" href="#top" aria-label="Dalbir Singh, home">
         <span className="brand-name">Dalbir Singh</span>
-        <span className="brand-role">Software Developer</span>
       </a>
 
       <nav className={`nav ${open ? 'nav-open' : ''}`} aria-label="Primary navigation">
@@ -85,7 +119,7 @@ function Hero() {
   return (
     <section className="hero section-shell" id="top">
       <div className="hero-copy">
-        <p className="eyebrow reveal">Dalbir Singh · Software Developer</p>
+        <p className="eyebrow reveal">Software Developer</p>
         <h1 className="hero-title reveal delay-1">
           From interface
           <span>to infrastructure.</span>
@@ -259,28 +293,7 @@ function Work() {
   const [expanded, setExpanded] = useState(null);
   const projects = filter === 'All' ? site.projects : site.projects.filter((project) => project.categories.includes(filter));
 
-  useEffect(() => {
-    const cards = document.querySelectorAll('.project-reveal');
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        threshold: 0.14,
-        rootMargin: '0px 0px -5% 0px'
-      }
-    );
-
-    cards.forEach((card) => observer.observe(card));
-
-    return () => observer.disconnect();
-  }, [filter]);
+  useReplayReveal('.project-reveal', filter);
 
   return (
     <section className="work section-shell" id="work">
@@ -353,21 +366,31 @@ function Work() {
 }
 
 function Stack() {
+  useReplayReveal('.capability-reveal');
+
   return (
     <section className="stack section-shell" id="stack">
       <div className="section-heading compact">
         <div><p className="eyebrow">Technical Range</p><h2>Across the stack.<br />Connected by systems thinking.</h2></div>
         <p>Not just a list of tools — these are the areas I have been building and learning through real coursework, team products and individual projects.</p>
       </div>
+
       <div className="capability-grid">
-        {site.capabilities.map((capability) => (
-          <article className="capability-card reveal" key={capability.title}>
-            <div className="capability-top"><span>{capability.title.split(' ')[0]}</span><i>↗</i></div>
-            <h3>{capability.title}</h3>
-            <p>{capability.text}</p>
-            <div className="tag-row subtle">{capability.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-          </article>
-        ))}
+        {site.capabilities.map((capability, index) => {
+          const revealClass = `capability-reveal capability-reveal-${(index % 3) + 1}`;
+
+          return (
+            <article
+              className={`capability-card ${revealClass}`}
+              key={capability.title}
+            >
+              <div className="capability-top"><span>{capability.title.split(' ')[0]}</span><i>↗</i></div>
+              <h3>{capability.title}</h3>
+              <p>{capability.text}</p>
+              <div className="tag-row subtle">{capability.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

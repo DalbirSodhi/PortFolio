@@ -2790,216 +2790,263 @@ body {
 }
 
 /* =========================================================
-   PROJECT MOTION V2 — STRONGER VISUALS + SCROLL ENTRANCE
-   Final overrides only. No grid/card dimensions are changed.
+   VIEWPORT MOTION V3 — REPLAYABLE + PERFORMANCE OPTIMIZED
+   Project + Technical Range cards.
+   Uses transform/opacity as the main animation path.
    ========================================================= */
 
 
 /* ---------------------------------------------------------
-   SCROLL REVEAL
-   Cards enter with depth, blur and stagger.
+   SHARED VIEWPORT ENTRANCE
+   Cards reset when they leave the viewport and replay on
+   every re-entry.
    --------------------------------------------------------- */
 
-.project-reveal {
+.project-reveal,
+.capability-reveal {
   opacity: 0;
-  filter: blur(10px);
+  filter: blur(2px);
 
   transform:
-    translate3d(0, 72px, 0)
-    scale(.93);
-
-  transform-origin: 50% 70%;
+    translate3d(0, 46px, 0)
+    scale(.965);
 
   transition:
-    opacity .78s cubic-bezier(.22, 1, .36, 1),
-    transform .88s cubic-bezier(.16, 1, .3, 1),
-    filter .72s ease,
-    box-shadow .25s ease,
-    border-color .25s ease;
+    opacity .58s cubic-bezier(.22, 1, .36, 1),
+    transform .68s cubic-bezier(.16, 1, .3, 1),
+    filter .34s ease;
 
-  will-change: opacity, transform, filter;
+  will-change: transform, opacity;
 }
 
-.project-reveal-1 {
+.project-reveal-1,
+.capability-reveal-1 {
   transform:
-    translate3d(-28px, 72px, 0)
-    scale(.93)
-    rotate(-1.2deg);
+    translate3d(-52px, 34px, 0)
+    scale(.965);
 }
 
-.project-reveal-2 {
+.project-reveal-2,
+.capability-reveal-2 {
+  transform:
+    translate3d(0, 52px, 0)
+    scale(.965);
+
+  transition-delay: 45ms;
+}
+
+.project-reveal-3,
+.capability-reveal-3 {
+  transform:
+    translate3d(52px, 34px, 0)
+    scale(.965);
+
   transition-delay: 90ms;
 }
 
-.project-reveal-3 {
-  transform:
-    translate3d(28px, 72px, 0)
-    scale(.93)
-    rotate(1.2deg);
-
-  transition-delay: 180ms;
-}
-
-.project-card.project-reveal.visible {
+.project-reveal.visible,
+.capability-reveal.visible {
   opacity: 1;
   filter: blur(0);
 
   transform:
     translate3d(0, 0, 0)
-    scale(1)
-    rotate(0deg);
-}
-
-.project-card.project-reveal.visible:hover {
-  transform:
-    translate3d(0, -7px, 0)
-    scale(1.012);
-
-  border-color: #bbc4ff;
-
-  box-shadow:
-    0 24px 55px rgba(37, 48, 91, .13);
+    scale(1);
 }
 
 
-/* Start expensive looping motion only after the card is visible. */
+/* Keep hover independent from the entrance transform. */
+@media (hover: hover) and (pointer: fine) {
+  .project-card.project-reveal.visible:hover {
+    transform:
+      translate3d(0, -6px, 0)
+      scale(1.008);
 
-.project-card:not(.visible) .project-art * {
-  animation-play-state: paused !important;
+    border-color: #bbc4ff;
+
+    box-shadow:
+      0 22px 48px rgba(37, 48, 91, .12);
+  }
+
+  .capability-card.capability-reveal.visible:hover {
+    transform:
+      translate3d(0, -5px, 0)
+      scale(1.006);
+
+    border-color: #c7ceff;
+
+    box-shadow:
+      0 18px 42px rgba(37, 48, 91, .10);
+  }
 }
 
 
 /* ---------------------------------------------------------
-   GLOBAL ART ENERGY
-   Stronger visual breathing without affecting layout.
+   PERFORMANCE ISOLATION
+   Paint-heavy project visuals remain clipped to their own
+   artwork box. Offscreen motion is paused.
    --------------------------------------------------------- */
 
-.project-card.visible .project-art {
-  animation: projectArtBreathe 6.8s ease-in-out infinite;
+.project-art {
+  contain: paint;
+  transform: translateZ(0);
 }
 
-.project-card.visible .project-art::after {
+.project-card:not(.visible) .project-art *,
+.project-card:not(.visible) .project-art::after {
+  animation-play-state: paused !important;
+}
+
+.project-card:not(.visible) .project-art * {
+  will-change: auto !important;
+}
+
+
+/* ---------------------------------------------------------
+   TRANSFORM-ONLY LIGHT SWEEP
+   No continuous saturation/filter animation.
+   --------------------------------------------------------- */
+
+.project-art::after {
   content: "";
 
   position: absolute;
-  top: -35%;
-  bottom: -35%;
-  left: -55%;
+  top: -38%;
+  bottom: -38%;
+  left: -22%;
 
-  width: 38%;
+  width: 26%;
 
   pointer-events: none;
 
   background:
     linear-gradient(
       105deg,
-      transparent 0%,
-      rgba(255,255,255,0) 20%,
-      rgba(255,255,255,.52) 50%,
-      rgba(255,255,255,0) 80%,
-      transparent 100%
+      transparent,
+      rgba(255,255,255,.48),
+      transparent
     );
-
-  transform: skewX(-16deg);
 
   opacity: 0;
 
-  animation: projectLightSweep 6.2s ease-in-out infinite;
+  transform:
+    translate3d(-240%, 0, 0)
+    skewX(-16deg);
+
+  will-change: transform, opacity;
 }
 
-@keyframes projectArtBreathe {
-  0%, 100% {
-    filter: saturate(1) contrast(1);
-  }
-
-  50% {
-    filter: saturate(1.13) contrast(1.025);
-  }
+.project-card.visible .project-art::after {
+  animation: projectLightSweepOptimized 5.8s ease-in-out infinite;
 }
 
-@keyframes projectLightSweep {
-  0%, 28% {
-    left: -55%;
+@keyframes projectLightSweepOptimized {
+  0%, 30% {
     opacity: 0;
+
+    transform:
+      translate3d(-240%, 0, 0)
+      skewX(-16deg);
   }
 
   42% {
-    opacity: .72;
+    opacity: .55;
   }
 
-  65% {
-    left: 120%;
+  68% {
     opacity: 0;
+
+    transform:
+      translate3d(560%, 0, 0)
+      skewX(-16deg);
   }
 
   100% {
-    left: 120%;
     opacity: 0;
+
+    transform:
+      translate3d(560%, 0, 0)
+      skewX(-16deg);
   }
 }
 
 
 /* ---------------------------------------------------------
-   1. RENTIQUE — stronger card exchange
+   STRONGER PROJECT VISUALS — TRANSFORM/OPACITY FIRST
    --------------------------------------------------------- */
 
+
+/* Rentique */
+
 .market-one {
-  animation-duration: 4.4s;
+  animation-duration: 4.5s;
 }
 
 .market-two {
-  animation-duration: 4.4s;
+  animation-duration: 4.5s;
 }
 
 .market-auth {
-  animation-duration: 2.8s;
+  animation-duration: 3s;
 }
 
 @keyframes rentiqueCardOne {
   0%, 100% {
-    transform: translate(0, 0) rotate(-5deg) scale(1);
+    transform:
+      translate3d(0, 0, 0)
+      rotate(-5deg)
+      scale(1);
   }
 
-  48% {
-    transform: translate(8px, -14px) rotate(-1deg) scale(1.055);
+  50% {
+    transform:
+      translate3d(10px, -13px, 0)
+      rotate(-1deg)
+      scale(1.055);
   }
 }
 
 @keyframes rentiqueCardTwo {
   0%, 100% {
-    transform: translate(0, 0) rotate(7deg) scale(1);
+    transform:
+      translate3d(0, 0, 0)
+      rotate(7deg)
+      scale(1);
   }
 
-  48% {
-    transform: translate(-7px, 12px) rotate(2deg) scale(1.05);
+  50% {
+    transform:
+      translate3d(-9px, 12px, 0)
+      rotate(2deg)
+      scale(1.05);
   }
 }
 
 @keyframes rentiqueAuthPulse {
   0%, 100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(79,70,229,0);
+    opacity: .82;
   }
 
   50% {
-    transform: scale(1.085);
-    box-shadow:
-      0 0 0 8px rgba(79,70,229,.08),
-      0 10px 26px rgba(79,70,229,.13);
+    transform: scale(1.09);
+    opacity: 1;
   }
 }
 
 
-/* ---------------------------------------------------------
-   2. SHELFSAFE — active dashboard feel
-   --------------------------------------------------------- */
+/* ShelfSafe */
 
 .inventory-bars i {
-  animation-duration: 2.9s;
+  animation-duration: 3s;
+}
+
+.inventory-search {
+  animation: shelfSearchFast 3.8s ease-in-out infinite;
 }
 
 .expiry-chip {
-  animation-duration: 2.6s;
+  animation-duration: 2.8s;
 }
 
 @keyframes shelfBar {
@@ -3014,119 +3061,102 @@ body {
   }
 }
 
-@keyframes shelfSearch {
+@keyframes shelfSearchFast {
   0%, 100% {
-    transform: translateX(0);
-    box-shadow: inset 0 0 0 0 rgba(15,143,131,0);
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: .72;
   }
 
-  45% {
-    transform: translateX(3px);
-    box-shadow:
-      inset 0 0 0 2px rgba(15,143,131,.15),
-      0 8px 24px rgba(15,143,131,.09);
+  50% {
+    transform: translate3d(4px, 0, 0) scale(1.015);
+    opacity: 1;
   }
 }
 
 @keyframes shelfExpiry {
-  0%, 65%, 100% {
-    transform: translateY(0) scale(1);
+  0%, 66%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
-  76% {
-    transform: translateY(-8px) scale(1.11);
+  78% {
+    transform: translate3d(0, -8px, 0) scale(1.11);
   }
 
-  86% {
-    transform: translateY(2px) scale(.98);
+  88% {
+    transform: translate3d(0, 2px, 0) scale(.98);
   }
 }
 
 
-/* ---------------------------------------------------------
-   3. FIXBEE — stronger scan / detection cycle
-   --------------------------------------------------------- */
+/* FixBee */
 
-.vision-beam,
-.vision-frame,
+.vision-beam {
+  top: 31%;
+  animation: fixbeeScanFast 2.55s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.vision-frame {
+  animation: fixbeeFrameFast 2.55s ease-in-out infinite;
+  will-change: transform;
+}
+
 .vision-frame b {
-  animation-duration: 2.45s;
+  animation: fixbeeConfidenceFast 2.55s ease-in-out infinite;
 }
 
 .vision-grid {
-  animation: fixbeeGrid 8s linear infinite;
+  animation: none;
 }
 
-@keyframes fixbeeScan {
+@keyframes fixbeeScanFast {
   0%, 100% {
-    top: 21%;
-    opacity: .3;
-
-    box-shadow:
-      0 0 8px rgba(91,103,241,.2);
+    transform: translate3d(0, 0, 0);
+    opacity: .28;
   }
 
   50% {
-    top: 79%;
+    transform: translate3d(0, 72px, 0);
     opacity: 1;
-
-    box-shadow:
-      0 0 26px rgba(91,103,241,.75);
   }
 }
 
-@keyframes fixbeeFrame {
+@keyframes fixbeeFrameFast {
   0%, 100% {
-    transform: translate(-50%, -50%) scale(.96);
-
-    box-shadow:
-      0 0 0 5px rgba(91,103,241,.04),
-      0 0 0 rgba(91,103,241,0);
+    transform:
+      translate(-50%, -50%)
+      scale(.96);
   }
 
   50% {
-    transform: translate(-50%, -50%) scale(1.045);
-
-    box-shadow:
-      0 0 0 8px rgba(91,103,241,.10),
-      0 0 30px rgba(91,103,241,.22);
+    transform:
+      translate(-50%, -50%)
+      scale(1.045);
   }
 }
 
-@keyframes fixbeeConfidence {
+@keyframes fixbeeConfidenceFast {
   0%, 100% {
     opacity: .45;
-    transform: translateY(0) scale(.94);
+    transform: scale(.94);
   }
 
   50% {
     opacity: 1;
-    transform: translateY(-2px) scale(1.08);
-  }
-}
-
-@keyframes fixbeeGrid {
-  from {
-    background-position: 0 0;
-  }
-
-  to {
-    background-position: 24px 24px;
+    transform: scale(1.08);
   }
 }
 
 
-/* ---------------------------------------------------------
-   4. MEAL EXPLORER — stronger discovery motion
-   --------------------------------------------------------- */
+/* Meal Explorer */
 
 .plate {
-  animation-duration: 4.5s;
+  animation-duration: 4.6s;
 }
 
 .meal-card-a,
 .meal-card-b {
-  animation-duration: 4s;
+  animation-duration: 4.1s;
 }
 
 @keyframes mealPlate {
@@ -3141,42 +3171,44 @@ body {
 
 @keyframes mealCardA {
   0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0);
   }
 
   50% {
-    transform: translate(10px, -13px) rotate(2deg);
+    transform: translate3d(10px, -13px, 0) rotate(2deg);
   }
 }
 
 @keyframes mealCardB {
   0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0);
   }
 
   50% {
-    transform: translate(-11px, 12px) rotate(-2deg);
+    transform: translate3d(-11px, 12px, 0) rotate(-2deg);
   }
 }
 
 
-/* ---------------------------------------------------------
-   5. MEALMATE — stronger planner interaction
-   --------------------------------------------------------- */
+/* MealMate */
 
 .planner-phone {
-  animation-duration: 5s;
+  animation-duration: 5.1s;
 }
 
 .planner-row {
-  animation-duration: 3.6s;
+  animation-duration: 3.7s;
+}
+
+.planner-add {
+  animation: plannerAddFast 3.2s ease-in-out infinite;
 }
 
 @keyframes plannerFloat {
   0%, 100% {
     transform:
       translateX(-50%)
-      translateY(0)
+      translate3d(0, 0, 0)
       rotate(-2deg)
       scale(1);
   }
@@ -3184,7 +3216,7 @@ body {
   50% {
     transform:
       translateX(-50%)
-      translateY(-10px)
+      translate3d(0, -9px, 0)
       rotate(1deg)
       scale(1.025);
   }
@@ -3192,148 +3224,145 @@ body {
 
 @keyframes plannerRow {
   0%, 100% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
     opacity: .64;
   }
 
   50% {
-    transform: translateX(8px);
+    transform: translate3d(8px, 0, 0);
     opacity: 1;
   }
 }
 
-@keyframes plannerAdd {
+@keyframes plannerAddFast {
   0%, 100% {
     transform: scale(1);
-    border-color: #b8d6d6;
-    background: transparent;
+    opacity: .72;
   }
 
   50% {
     transform: scale(1.045);
-    border-color: rgba(15,143,131,.58);
-    background: rgba(15,143,131,.07);
+    opacity: 1;
   }
 }
 
 
-/* ---------------------------------------------------------
-   6. AUTH API — stronger token handshake
-   --------------------------------------------------------- */
+/* Authentication API */
 
 .auth-lock,
 .token-a,
 .token-b,
 .auth-route {
-  animation-duration: 3.55s;
+  animation-duration: 3.6s;
 }
 
 @keyframes authLock {
   0%, 100% {
-    transform: translateX(-50%) scale(.96);
-    box-shadow: 0 0 0 rgba(141,102,200,0);
+    transform:
+      translateX(-50%)
+      scale(.96);
   }
 
   50% {
-    transform: translateX(-50%) scale(1.09);
-
-    box-shadow:
-      0 0 0 8px rgba(141,102,200,.06),
-      0 0 30px rgba(141,102,200,.20);
+    transform:
+      translateX(-50%)
+      scale(1.09);
   }
 }
 
 @keyframes authTokenStart {
   0%, 100% {
-    transform: translateX(-5px);
-    opacity: .42;
+    transform: translate3d(-5px, 0, 0);
+    opacity: .4;
   }
 
   48%, 68% {
-    transform: translateX(18px);
+    transform: translate3d(18px, 0, 0);
     opacity: 1;
   }
 }
 
 @keyframes authTokenBearer {
   0%, 20%, 100% {
-    transform: translateX(7px);
+    transform: translate3d(7px, 0, 0);
     opacity: .4;
   }
 
   55%, 82% {
-    transform: translateX(-18px);
+    transform: translate3d(-18px, 0, 0);
     opacity: 1;
   }
 }
 
 @keyframes authRoute {
   0%, 100% {
-    transform: translateX(-50%) scale(.98);
-    box-shadow: 0 0 0 rgba(76,154,106,0);
+    transform:
+      translateX(-50%)
+      scale(.98);
+
+    opacity: .72;
   }
 
   60% {
-    transform: translateX(-50%) scale(1.04);
+    transform:
+      translateX(-50%)
+      scale(1.045);
 
-    box-shadow:
-      0 10px 24px rgba(76,154,106,.13);
+    opacity: 1;
   }
 }
 
 
-/* ---------------------------------------------------------
-   7. CLOUD — visibly flowing request path
-   --------------------------------------------------------- */
+/* Cloud Deployment */
 
 .cloud-flow div {
-  animation-duration: 3.8s;
+  animation-duration: 3.9s;
 }
 
 .cloud-flow i {
-  animation-duration: 1.9s;
+  animation-duration: 1.95s;
+}
+
+.cloud-chip {
+  animation-duration: 4.2s;
 }
 
 @keyframes cloudNode {
   0%, 100% {
-    transform: translateY(0) scale(.98);
-    box-shadow: 0 0 0 rgba(91,103,241,0);
+    transform: translate3d(0, 0, 0) scale(.98);
+    opacity: .7;
   }
 
   50% {
-    transform: translateY(-7px) scale(1.035);
-
-    box-shadow:
-      0 11px 24px rgba(91,103,241,.11);
+    transform: translate3d(0, -7px, 0) scale(1.035);
+    opacity: 1;
   }
 }
 
 @keyframes cloudArrow {
   0%, 100% {
     opacity: .22;
-    transform: translateX(-2px) scale(.9);
+    transform: translate3d(-2px, 0, 0) scale(.9);
   }
 
   50% {
     opacity: 1;
-    transform: translateX(6px) scale(1.18);
+    transform: translate3d(6px, 0, 0) scale(1.18);
   }
 }
 
 @keyframes cloudChipFloat {
   0%, 100% {
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
   50% {
-    transform: translateY(-7px) scale(1.045);
+    transform: translate3d(0, -7px, 0) scale(1.045);
   }
 }
 
 
-/* ---------------------------------------------------------
-   8. SWIFTUI — stronger row/data motion
-   --------------------------------------------------------- */
+/* SwiftUI */
 
 .swift-window {
   animation-duration: 5.2s;
@@ -3347,7 +3376,7 @@ body {
   0%, 100% {
     transform:
       translateX(-50%)
-      translateY(0)
+      translate3d(0, 0, 0)
       rotate(2deg)
       scale(1);
   }
@@ -3355,7 +3384,7 @@ body {
   50% {
     transform:
       translateX(-50%)
-      translateY(-8px)
+      translate3d(0, -8px, 0)
       rotate(-1deg)
       scale(1.025);
   }
@@ -3363,36 +3392,34 @@ body {
 
 @keyframes swiftRow {
   0%, 100% {
-    transform: translateX(0);
-    background-color: transparent;
+    transform: translate3d(0, 0, 0);
+    opacity: .72;
   }
 
   50% {
-    transform: translateX(7px);
-    background-color: rgba(229,143,77,.09);
+    transform: translate3d(7px, 0, 0);
+    opacity: 1;
   }
 }
 
 
-/* ---------------------------------------------------------
-   9. FLUTTER — more expressive mood bubbles
-   --------------------------------------------------------- */
+/* Flutter */
 
 .mood-bubble {
-  animation-duration: 3.8s;
+  animation-duration: 3.9s;
 }
 
 @keyframes moodFloat {
   0%, 100% {
     transform:
-      translateY(0)
+      translate3d(0, 0, 0)
       rotate(-2deg)
       scale(.96);
   }
 
   50% {
     transform:
-      translateY(-14px)
+      translate3d(0, -14px, 0)
       rotate(6deg)
       scale(1.10);
   }
@@ -3401,46 +3428,64 @@ body {
 @keyframes moodCopyPulse {
   0%, 100% {
     opacity: .65;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   50% {
     opacity: 1;
-    transform: translateX(4px);
+    transform: translate3d(4px, 0, 0);
   }
 }
 
 
 /* ---------------------------------------------------------
    MOBILE
-   Keep the entrance impactful but remove sideways drift.
-   Internal art remains animated, slightly slower.
+   Shorter travel, lighter blur and no three-card desktop
+   stagger delay.
    --------------------------------------------------------- */
 
 @media (max-width: 760px) {
 
   .project-reveal,
+  .capability-reveal,
   .project-reveal-1,
   .project-reveal-2,
-  .project-reveal-3 {
-    filter: blur(7px);
+  .project-reveal-3,
+  .capability-reveal-1,
+  .capability-reveal-2,
+  .capability-reveal-3 {
+    filter: blur(1px);
 
     transform:
-      translate3d(0, 42px, 0)
-      scale(.96);
+      translate3d(0, 34px, 0)
+      scale(.975);
 
     transition-delay: 0ms;
   }
 
-  .project-reveal-2 {
-    transition-delay: 55ms;
+  .project-reveal-1,
+  .capability-reveal-1 {
+    transform:
+      translate3d(-28px, 28px, 0)
+      scale(.975);
   }
 
-  .project-reveal-3 {
-    transition-delay: 110ms;
+  .project-reveal-2,
+  .capability-reveal-2 {
+    transform:
+      translate3d(28px, 28px, 0)
+      scale(.975);
   }
 
-  .project-card.project-reveal.visible {
+  .project-reveal-3,
+  .capability-reveal-3 {
+    transform:
+      translate3d(-28px, 28px, 0)
+      scale(.975);
+  }
+
+  .project-reveal.visible,
+  .capability-reveal.visible {
     filter: blur(0);
 
     transform:
@@ -3448,18 +3493,8 @@ body {
       scale(1);
   }
 
-  .project-card.project-reveal.visible:hover {
-    transform:
-      translate3d(0, -3px, 0)
-      scale(1.004);
-  }
-
-  .project-card.visible .project-art {
-    animation-duration: 8s;
-  }
-
   .project-card.visible .project-art::after {
-    animation-duration: 7.4s;
+    animation-duration: 7.2s;
   }
 
   .market-one,
@@ -3470,7 +3505,7 @@ body {
   .meal-card-b,
   .mood-bubble,
   .cloud-chip {
-    animation-duration: 5.6s;
+    animation-duration: 5.3s;
   }
 
   .inventory-bars i,
@@ -3488,7 +3523,7 @@ body {
   .planner-row,
   .planner-add,
   .swift-row {
-    animation-duration: 4.6s;
+    animation-duration: 4.4s;
   }
 }
 
@@ -3500,21 +3535,675 @@ body {
 @media (prefers-reduced-motion: reduce) {
 
   .project-reveal,
-  .project-reveal-1,
-  .project-reveal-2,
-  .project-reveal-3,
-  .project-card.project-reveal.visible {
+  .capability-reveal,
+  .project-reveal.visible,
+  .capability-reveal.visible {
     opacity: 1 !important;
     filter: none !important;
     transform: none !important;
     transition: none !important;
   }
 
-  .project-card.visible .project-art,
-  .project-card.visible .project-art::after,
-  .project-art *,
-  .vision-grid {
+  .project-card .project-art::after,
+  .project-art * {
     animation: none !important;
+  }
+}
+
+/* =========================================================
+   WARM PORTFOLIO PALETTE — ORANGE / SUNLIGHT / NEUTRALS
+   Visual theme only. No layout, sizing, responsive or
+   animation mechanics are changed in this block.
+   Palette inspiration:
+   #FF8400 / #FFCA28 / #1A0F07 / #FFF8E1 / #A29789
+   ========================================================= */
+
+:root {
+  --bg: #fffaf0;
+  --surface: #fffdf8;
+  --surface-soft: #fff5e6;
+
+  --text: #1a0f07;
+  --text-strong: #1a0f07;
+
+  --muted: #6f6258;
+  --muted-2: #a29789;
+
+  --line: #eadfce;
+  --line-strong: #d7c7b2;
+
+  /* Bright brand orange is used for fills/highlights.
+     Darker orange is used where small text needs stronger contrast. */
+  --accent: #ff8400;
+  --accent-dark: #c95f00;
+  --accent-2: #ffca28;
+  --accent-3: #a29789;
+  --accent-soft: #fff0d6;
+
+  --shadow:
+    0 20px 50px rgba(74, 42, 18, 0.09);
+
+  --shadow-small:
+    0 8px 28px rgba(74, 42, 18, 0.07);
+}
+
+
+/* Selection */
+
+::selection {
+  color: #1a0f07;
+  background: #ffca28;
+}
+
+
+/* ---------------------------------------------------------
+   PAGE / AMBIENT
+   --------------------------------------------------------- */
+
+body {
+  color: var(--text);
+
+  background:
+    radial-gradient(
+      circle at 10% 5%,
+      rgba(255, 132, 0, 0.13),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 90% 12%,
+      rgba(255, 202, 40, 0.13),
+      transparent 25%
+    ),
+    #fffaf0;
+}
+
+.ambient {
+  background:
+    radial-gradient(
+      430px circle at var(--mx) var(--my),
+      rgba(255, 132, 0, 0.075),
+      transparent 58%
+    );
+}
+
+.eyebrow {
+  color: var(--accent-dark);
+}
+
+
+/* ---------------------------------------------------------
+   NAVIGATION
+   --------------------------------------------------------- */
+
+.nav-wrap {
+  border-color: rgba(215, 199, 178, 0.88);
+
+  background:
+    rgba(255, 253, 248, 0.93);
+
+  box-shadow:
+    0 12px 38px rgba(74, 42, 18, 0.08);
+}
+
+.brand,
+.brand-name {
+  color: #1a0f07;
+}
+
+.brand-role {
+  color: #7b6e63;
+}
+
+.nav a {
+  color: #51443b;
+}
+
+.nav a:hover {
+  color: var(--accent-dark);
+}
+
+.nav a::after {
+  background: #ff8400;
+}
+
+.menu {
+  border-color: var(--line);
+  background: rgba(255, 253, 248, 0.98);
+}
+
+.menu span {
+  background: #1a0f07;
+}
+
+/* Keep availability green because it is a status signal. */
+.availability {
+  color: #675b51;
+}
+
+
+/* ---------------------------------------------------------
+   BUTTONS / LINKS
+   --------------------------------------------------------- */
+
+.button-primary {
+  color: #1a0f07;
+
+  border-color: rgba(218, 105, 0, 0.18);
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff8400 0%,
+      #ffad21 100%
+    );
+
+  box-shadow:
+    0 13px 30px rgba(255, 132, 0, 0.22);
+}
+
+.button-primary:hover {
+  box-shadow:
+    0 16px 34px rgba(255, 132, 0, 0.28);
+}
+
+.button-ghost,
+.button-light {
+  color: #3b3029;
+  border-color: var(--line-strong);
+  background: rgba(255, 253, 248, 0.90);
+}
+
+.social-row > a:not(.source-link) {
+  color: #5d5046;
+  border-color: var(--line);
+  background: #fffdf8;
+}
+
+.social-row > a:not(.source-link):hover {
+  color: var(--accent-dark);
+  border-color: rgba(255, 132, 0, 0.38);
+}
+
+.social-row .source-link,
+.project-link,
+.github-more-heading > a,
+.repo-card b {
+  color: var(--accent-dark);
+}
+
+
+/* ---------------------------------------------------------
+   HERO
+   --------------------------------------------------------- */
+
+.hero-title {
+  color: #1a0f07;
+}
+
+.hero-title span {
+  color: #8a796c;
+}
+
+.hero-lede {
+  color: #6f6258;
+}
+
+.hero-visual::before {
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 132, 0, 0.24),
+      rgba(255, 202, 40, 0.12) 46%,
+      transparent 72%
+    );
+}
+
+.profile-orbit {
+  border-color: rgba(255, 132, 0, 0.24);
+}
+
+.orbit-b {
+  border-color: rgba(255, 202, 40, 0.55);
+}
+
+.hero-card {
+  border-color: #dfcfba;
+
+  background:
+    rgba(255, 253, 248, 0.92);
+
+  box-shadow:
+    0 30px 70px rgba(74, 42, 18, 0.14);
+}
+
+.portrait-frame {
+  background:
+    linear-gradient(
+      150deg,
+      #fff0d3,
+      #fff8e1 55%,
+      #ffe6bc
+    );
+}
+
+.hero-card-meta {
+  color: #8c7c70;
+}
+
+.skill-node {
+  border-color: rgba(255, 132, 0, 0.22);
+
+  background:
+    rgba(255, 253, 248, 0.96);
+
+  box-shadow:
+    0 14px 35px rgba(74, 42, 18, 0.10);
+}
+
+.skill-node span {
+  color: #493a31;
+}
+
+.hero-bottom {
+  color: #88786c;
+}
+
+.hero-bottom i {
+  background: #ff8400;
+}
+
+
+/* ---------------------------------------------------------
+   MARQUEE
+   --------------------------------------------------------- */
+
+.marquee {
+  border-color: var(--line);
+  background: rgba(255, 248, 225, 0.68);
+}
+
+.marquee span {
+  color: #77695e;
+}
+
+.marquee span i {
+  color: #ff8400;
+}
+
+
+/* ---------------------------------------------------------
+   SECTION HEADINGS
+   --------------------------------------------------------- */
+
+.section-heading h2,
+.journey-heading h2,
+.about-heading h2 {
+  color: #1a0f07;
+}
+
+.section-heading > p,
+.journey-heading > p:last-child,
+.about-copy p {
+  color: #6f6258;
+}
+
+
+/* ---------------------------------------------------------
+   PROJECT ARCHIVE
+   --------------------------------------------------------- */
+
+.filter-row button {
+  color: #75685d;
+
+  border-color: var(--line);
+
+  background:
+    rgba(255, 253, 248, 0.82);
+}
+
+.filter-row button:hover {
+  color: #1a0f07;
+  border-color: rgba(255, 132, 0, 0.42);
+  background: #fff1d8;
+}
+
+.filter-row button.active {
+  color: #1a0f07;
+
+  border-color: #ff8400;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff8400,
+      #ffad21
+    );
+
+  box-shadow:
+    0 9px 24px rgba(255, 132, 0, 0.20);
+}
+
+.project-card {
+  border-color: var(--line);
+
+  background:
+    rgba(255, 253, 248, 0.95);
+
+  box-shadow: var(--shadow-small);
+}
+
+.project-card-body {
+  background:
+    rgba(255, 253, 248, 0.92);
+}
+
+.project-card.project-reveal.visible:hover {
+  border-color: rgba(255, 132, 0, 0.55);
+
+  box-shadow:
+    0 22px 48px rgba(100, 54, 20, 0.13);
+}
+
+.project-categories {
+  color: var(--accent-dark);
+}
+
+.project-card h3 {
+  color: #1a0f07;
+}
+
+.project-subtitle {
+  color: #625348;
+}
+
+.project-description {
+  color: #74665b;
+}
+
+.tag-row span {
+  color: #695c52;
+  border-color: #e7d9c7;
+  background: #fff8e9;
+}
+
+.project-actions {
+  border-color: #eadfce;
+}
+
+.project-toggle {
+  color: #88786c;
+}
+
+.project-role,
+.project-extra ul {
+  color: #75675c;
+}
+
+.project-role b {
+  color: #493a31;
+}
+
+
+/* Preserve FixBee's technical blue visual identity inside its artwork. */
+
+.art-vision .vision-frame {
+  border-color: #5b67f1;
+}
+
+.art-vision .vision-frame span,
+.art-vision .vision-frame b {
+  color: #5b67f1;
+}
+
+.art-vision .vision-beam {
+  background: rgba(91, 103, 241, 0.55);
+  box-shadow: 0 0 15px rgba(91, 103, 241, 0.42);
+}
+
+
+/* ---------------------------------------------------------
+   MORE ON GITHUB
+   --------------------------------------------------------- */
+
+.github-more {
+  border-color: var(--line);
+}
+
+.github-more-heading h3 {
+  color: #1a0f07;
+}
+
+.repo-card {
+  border-color: var(--line);
+
+  background:
+    rgba(255, 253, 248, 0.78);
+}
+
+.repo-card:hover {
+  border-color: rgba(255, 132, 0, 0.38);
+  background: #fffdf8;
+}
+
+.repo-card > div {
+  color: #918276;
+}
+
+.repo-card h4 {
+  color: #1a0f07;
+}
+
+.repo-card p {
+  color: #75685e;
+}
+
+
+/* ---------------------------------------------------------
+   TECHNICAL RANGE
+   Alternating warm surfaces instead of identical cool cards.
+   --------------------------------------------------------- */
+
+.capability-card {
+  border-color: #eadfce;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf8,
+      #fff9ee
+    );
+
+  box-shadow:
+    0 8px 28px rgba(74, 42, 18, 0.055);
+}
+
+.capability-card:nth-child(2n) {
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf8,
+      #fff1dd
+    );
+}
+
+.capability-card:nth-child(3n) {
+  background:
+    linear-gradient(
+      145deg,
+      #fffdf8,
+      #fff7d6
+    );
+}
+
+.capability-card.capability-reveal.visible:hover {
+  border-color: rgba(255, 132, 0, 0.46);
+
+  box-shadow:
+    0 18px 42px rgba(100, 54, 20, 0.105);
+}
+
+.capability-top {
+  color: var(--accent-dark);
+}
+
+.capability-top i {
+  color: #ff8400;
+}
+
+.capability-card h3 {
+  color: #1a0f07;
+}
+
+.capability-card > p {
+  color: #6f6258;
+}
+
+.capability-card .tag-row span {
+  background: rgba(255, 248, 225, 0.80);
+}
+
+
+/* ---------------------------------------------------------
+   JOURNEY
+   --------------------------------------------------------- */
+
+.journey {
+  border-color: var(--line);
+
+  background:
+    rgba(255, 248, 225, 0.42);
+}
+
+.timeline {
+  border-color: var(--line);
+}
+
+.timeline-item {
+  border-color: var(--line);
+}
+
+.timeline-item div > p {
+  color: var(--accent-dark);
+}
+
+.timeline-item h3 {
+  color: #1a0f07;
+}
+
+.timeline-item b {
+  color: #625449;
+}
+
+.timeline-item div > span {
+  color: #74665b;
+}
+
+
+/* ---------------------------------------------------------
+   ABOUT
+   --------------------------------------------------------- */
+
+.about-copy .about-lede {
+  color: #3c3028;
+}
+
+.principle-strip div {
+  border-color: var(--line);
+
+  background:
+    rgba(255, 253, 248, 0.78);
+}
+
+.principle-strip div:nth-child(2n) {
+  background:
+    rgba(255, 240, 214, 0.66);
+}
+
+.principle-strip b {
+  color: #55463c;
+}
+
+
+/* ---------------------------------------------------------
+   CONTACT — strongest use of the new palette
+   --------------------------------------------------------- */
+
+.contact {
+  border-color: var(--line);
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff8e1 0%,
+      #ffe3bd 47%,
+      #ffd45d 100%
+    );
+}
+
+.contact-grid {
+  opacity: 0.32;
+
+  background-image:
+    linear-gradient(
+      rgba(201, 95, 0, 0.10) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(201, 95, 0, 0.10) 1px,
+      transparent 1px
+    );
+}
+
+.contact::before {
+  border-color: rgba(255, 132, 0, 0.24);
+
+  box-shadow:
+    0 0 0 90px rgba(255, 132, 0, 0.035),
+    0 0 0 180px rgba(255, 202, 40, 0.035);
+}
+
+.contact h2 {
+  color: #1a0f07;
+}
+
+.contact h2 span {
+  color: var(--accent-dark);
+}
+
+.contact-inner > p:not(.eyebrow) {
+  color: #635247;
+}
+
+.button-dark {
+  color: #fff8e1;
+  border-color: #1a0f07;
+  background: #1a0f07;
+}
+
+.contact footer {
+  border-color: rgba(95, 69, 49, 0.22);
+}
+
+.contact footer span,
+.footer-links a {
+  color: #66564b;
+}
+
+.contact footer b {
+  color: #1a0f07;
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE NAV SURFACE
+   Color-only override; geometry remains untouched.
+   --------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .nav,
+  .nav.nav-open {
+    background: rgba(255, 253, 248, 0.985);
   }
 }
 

@@ -145,7 +145,7 @@ function Hero() {
         <div className="hero-card">
           <div className="portrait-frame">
             {site.portrait ? (
-              // eslint-disable-next-line @next/next/no-img-element
+              
               <img src={site.portrait} alt="Dalbir Singh" />
             ) : (
               <div className="monogram">
@@ -154,10 +154,10 @@ function Hero() {
               </div>
             )}
           </div>
-          <div className="hero-card-meta"><span>DALBIR / DEV</span><span>BC / CANADA</span></div>
+          <div className="hero-card-meta"><span>DALBIR </span><span>BC / CANADA</span></div>
         </div>
         <div className="skill-node node-mobile"><span>Frontend + Mobile</span></div>
-        <div className="skill-node node-backend"><span>Backend APIs</span></div>
+        <div className="skill-node node-backend"><span>Backend + Database</span></div>
         <div className="skill-node node-cloud"><span>System Design</span></div>
         <div className="skill-node node-ai"><span>Cloud + AI</span></div>
       </div>
@@ -188,9 +188,13 @@ function ProjectVisual({ visual, title }) {
   if (visual === 'marketplace') {
     return (
       <div className="project-art art-marketplace">
-        <div className="market-card market-one"><span>RENT</span><b>Jacket</b></div>
-        <div className="market-card market-two"><span>BUY</span><b>Style</b></div>
-        <div className="market-auth">Firebase Auth ✓</div>
+        <div className="market-auth"><span>RENT</span><b>Jacket</b></div>
+        <div className="market-chat"><span>BUY</span><b>Style</b></div>
+        <div className="market-card market-one">Firebase Auth ✓</div>
+        <div className="market-card market-two"><span>LIVE CHAT</span><b>user ↔ user</b></div>
+        <div className="visual-flow visual-flow-rentique">
+          <span>Firebase Auth</span><i>→</i><span>MVC</span><i>→</i><span>Live Chat</span>
+        </div>
         <div className="art-caption"><span>MARKETPLACE</span><b>WEB / FIREBASE</b></div>
       </div>
     );
@@ -201,7 +205,13 @@ function ProjectVisual({ visual, title }) {
         <div className="inventory-bars"><i /><i /><i /><i /></div>
         <div className="inventory-search">Search products...</div>
         <div className="expiry-chip">Expiry alerts</div>
-        <div className="art-caption"><span>INVENTORY</span><b>MERN / JWT</b></div>
+        <div className="inventory-voice">VOICE</div>
+        <div className="inventory-groq">AI COMMANDS</div>
+        <div className="inventory-barcode">CAMERA / BARCODE</div>
+        <div className="visual-flow visual-flow-shelf">
+          <span>Voice</span><i>→</i><span>Deepgram</span><i>→</i><span>Groq</span>
+        </div>
+        <div className="art-caption"><span>INVENTORY</span><b>VOICE / CAMERA / AI</b></div>
       </div>
     );
   }
@@ -212,7 +222,12 @@ function ProjectVisual({ visual, title }) {
         <div className="vision-frame"><span>SCAN</span><b>94%</b></div>
         <div className="vision-pipe pipe-v" /><div className="vision-pipe pipe-h" />
         <div className="vision-beam" />
-        <div className="art-caption"><span>IMAGE ANALYSIS</span><b>AI / CV</b></div>
+        <div className="vision-chip vision-openai">OPENAI</div>
+        <div className="vision-chip vision-yolo">YOLO DETECT</div>
+        <div className="visual-flow visual-flow-fixbee">
+          <span>Photo</span><i>→</i><span>YOLO</span><i>→</i><span>OpenAI</span>
+        </div>
+        <div className="art-caption"><span>IMAGE ANALYSIS</span><b>VISION / GUARDRAILS</b></div>
       </div>
     );
   }
@@ -288,75 +303,119 @@ function ProjectVisual({ visual, title }) {
 }
 
 function Work() {
-  const filters = ['All', 'Web', 'Mobile', 'Backend', 'Cloud', 'AI'];
-  const [filter, setFilter] = useState('All');
-  const [expanded, setExpanded] = useState(null);
-  const projects = filter === 'All' ? site.projects : site.projects.filter((project) => project.categories.includes(filter));
+  const featuredProjects = site.projects.slice(0, 3);
+  const moreProjects = site.projects.slice(3);
 
-  useReplayReveal('.project-reveal', filter);
+  useReplayReveal('.featured-project');
+  useReplayReveal('.archive-work-item');
 
   return (
     <section className="work section-shell" id="work">
-      <div className="section-heading">
+      <div className="section-heading selected-work-heading">
         <div>
-          <p className="eyebrow">Project Archive</p>
-          <h2>Work across the stack.</h2>
+          <p className="eyebrow">Selected Work</p>
+          <h2>Three products.<br />Different systems.</h2>
         </div>
-        <p>A curated selection of team and individual work across web, mobile, backend systems, cloud deployment, native development and applied AI.</p>
+
+        <p>
+          Three builds that show how I work across product experience,
+          application architecture, real-time features and applied AI.
+        </p>
       </div>
 
-      <div className="filter-row" aria-label="Filter projects">
-        {filters.map((item) => <button key={item} className={filter === item ? 'active' : ''} onClick={() => setFilter(item)}>{item}</button>)}
-      </div>
+      <div className="featured-projects">
+        {featuredProjects.map((project, index) => (
+          <article
+            className={`featured-project featured-project-${index + 1}`}
+            key={project.slug}
+          >
+            <div className="featured-info">
+              <div className="featured-topline">
+                <span>0{index + 1} / 03</span>
+                <b>{project.categories.join(' · ')}</b>
+              </div>
 
-      <div className="project-grid">
-        {projects.map((project, index) => {
-          const isOpen = expanded === project.slug;
-          const revealClass = `project-reveal project-reveal-${(index % 3) + 1}`;
+              <div className="featured-info-kicker">
+                <span>{project.role}</span>
+                <b>{project.subtitle}</b>
+              </div>
 
-          return (
-            <article
-              className={`project-card ${revealClass} ${isOpen ? 'expanded' : ''}`}
-              key={project.slug}
-            >
-              <ProjectVisual visual={project.visual} title={project.title} />
-              <div className="project-card-body">
-                <div className="project-categories">{project.categories.join(' · ')}</div>
-                <h3>{project.title}</h3>
-                <p className="project-subtitle">{project.subtitle}</p>
-                <p className="project-description">{project.description}</p>
-                <div className="tag-row">{project.stack.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
-                <div className="project-actions">
-                  <a className="project-link" href={project.link} target="_blank" rel="noreferrer">{project.linkLabel} <Arrow diagonal /></a>
-                  <button className="project-toggle" onClick={() => setExpanded(isOpen ? null : project.slug)} aria-expanded={isOpen}>
-                    {isOpen ? 'Less' : 'Details'}
-                  </button>
-                </div>
-                <div className="project-extra">
-                  <div className="project-role"><span>Role</span><b>{project.role}</b></div>
-                  <ul>{project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>
+              <h3>{project.title}</h3>
+              <p className="featured-description">{project.description}</p>
+
+              <div className="featured-focus">
+                <span>Core stack</span>
+                <div>
+                  {project.stack.slice(0, 5).map((tag) => (
+                    <b key={tag}>{tag}</b>
+                  ))}
                 </div>
               </div>
-            </article>
-          );
-        })}
+
+              <div className="featured-highlights">
+                <span>Major delivery</span>
+                <div className="featured-highlight-grid">
+                  {project.highlights.map((highlight) => (
+                    <div className="featured-highlight" key={highlight}>
+                      <i />
+                      <strong>{highlight}</strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                className="featured-link"
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {project.linkLabel} <Arrow diagonal />
+              </a>
+            </div>
+
+            <div className="featured-visual-shell">
+              <ProjectVisual visual={project.visual} title={project.title} />
+            </div>
+          </article>
+        ))}
       </div>
 
-      <div className="github-more">
-        <div className="github-more-heading">
+      <div className="more-work">
+        <div className="more-work-heading">
           <div>
-            <p className="eyebrow">More on GitHub</p>
-            <h3>More code, less homepage scroll.</h3>
+            <p className="eyebrow">More Work</p>
+            <h3>More code. Less scroll.</h3>
           </div>
-          <a href={site.links.github} target="_blank" rel="noreferrer">View full GitHub <Arrow diagonal /></a>
+
+          <a href={site.links.github} target="_blank" rel="noreferrer">
+            View full GitHub <Arrow diagonal />
+          </a>
         </div>
-        <div className="repo-strip">
-          {site.githubProjects.map((repo) => (
-            <a className="repo-card" href={repo.href} target="_blank" rel="noreferrer" key={repo.name}>
-              <div><GithubIcon /><span>Public repo</span></div>
-              <h4>{repo.name}</h4>
-              <p>{repo.description}</p>
-              <b>Open repository ↗</b>
+
+        <div className="archive-work-list">
+          {moreProjects.map((project, index) => (
+            <a
+              className={`archive-work-item archive-work-${(index % 2) + 1}`}
+              href={project.link}
+              target="_blank"
+              rel="noreferrer"
+              key={project.slug}
+            >
+              <span className="archive-index">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+
+              <div className="archive-work-copy">
+                <div>
+                  <h4>{project.title}</h4>
+                  <span>{project.subtitle}</span>
+                </div>
+
+                <p>{project.stack.slice(0, 3).join(' · ')}</p>
+              </div>
+
+              <i>↗</i>
             </a>
           ))}
         </div>

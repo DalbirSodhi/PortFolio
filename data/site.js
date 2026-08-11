@@ -4,9 +4,7 @@ export const site = {
   role: 'Software Developer',
   location: 'British Columbia, Canada',
   availability: 'Open to software opportunities',
-
   headline: 'I build products from interface to infrastructure.',
-
   intro:
     'Full-stack software developer with an engineering background, building across mobile, web, backend APIs, system design, cloud infrastructure and applied AI.',
 
@@ -18,7 +16,6 @@ export const site = {
     source: 'https://github.com/DalbirSodhi/Portfolio'
   },
 
-  // Your image is stored at public/Dalbir.png
   portrait: '/Dalbir.png',
 
   disciplines: [
@@ -43,7 +40,6 @@ export const site = {
         'Flutter'
       ]
     },
-
     {
       title: 'Backend & Data',
       text:
@@ -58,7 +54,6 @@ export const site = {
         'bcrypt'
       ]
     },
-
     {
       title: 'System Design & Architecture',
       text:
@@ -72,7 +67,6 @@ export const site = {
         'API Contracts'
       ]
     },
-
     {
       title: 'Cloud & Delivery',
       text:
@@ -86,7 +80,6 @@ export const site = {
         'Git/GitHub'
       ]
     },
-
     {
       title: 'Applied AI',
       text:
@@ -106,62 +99,53 @@ export const site = {
       slug: 'rentique',
       visual: 'marketplace',
       categories: ['Web', 'Backend'],
-
       title: 'Rentique',
       subtitle: 'Peer-to-peer fashion rental marketplace',
-
       description:
-        'A responsive marketplace experience for renting and purchasing fashion items, with authentication, onboarding, profile flows and structured client-side application logic.',
-
+        'A peer-to-peer fashion marketplace built around Firebase authentication, MVC-oriented client architecture and live user-to-user messaging.',
       role: 'Frontend / full-stack contributor',
-
       stack: [
-        'JavaScript',
+        'JavaScript ES6+',
         'CSS3',
         'Firebase Auth',
-        'MVC',
-        'Figma'
+        'MVC Architecture',
+        'Live Chat',
+        'Firestore Database'
       ],
-
       link: 'https://github.com/DalbirSodhi',
       linkLabel: 'View contribution',
-
       highlights: [
-        'Built responsive signup, login, profile, questionnaire and marketplace-onboarding flows.',
-        'Implemented client-side validation and session-based access control.',
-        'Separated UI, authentication and data responsibilities for cleaner maintainability.'
+        'MVC-structured client architecture',
+        'Authentication, onboarding and profile flows',
+        'Live user-to-user marketplace chat'
       ]
     },
 
     {
       slug: 'shelfsafe',
       visual: 'inventory',
-      categories: ['Web', 'Backend'],
-
+      categories: ['Web', 'Backend', 'AI'],
       title: 'ShelfSafe',
-      subtitle: 'Inventory & expiry management platform',
-
+      subtitle: 'Intelligent inventory & expiry management',
       description:
-        'A MERN inventory platform focused on product lookup, expiry awareness, protected application flows and role-aware access for inventory operations.',
-
+        'An intelligent inventory platform combining voice control, camera barcode capture, protected workflows and expiry management.',
       role: 'Full-stack contributor',
-
       stack: [
         'React',
         'Node.js',
-        'Express',
         'MongoDB',
         'JWT',
-        'REST'
+        'Deepgram',
+        'Groq',
+        'Camera Barcode',
+        'NodeMailer'
       ],
-
       link: 'https://github.com/DalbirSodhi',
       linkLabel: 'View contribution',
-
       highlights: [
-        'Built React dashboard experiences, product lookup and live search.',
-        'Implemented automated expiry-alert behavior and authentication flows.',
-        'Worked with protected routes, JWT authentication and role-based access control.'
+        'Voice control with Deepgram + Groq',
+        'Camera barcode scanning for product lookup',
+        'Protected inventory and expiry workflows'
       ]
     },
 
@@ -169,31 +153,25 @@ export const site = {
       slug: 'fixbee',
       visual: 'vision',
       categories: ['Mobile', 'Backend', 'AI'],
-
       title: 'FixBee',
-      subtitle: 'Smart home repair assistant',
-
+      subtitle: 'AI-assisted smart home repair platform',
       description:
-        'A React Native product that analyzes home-repair photos and turns AI output into structured severity, recommendations, DIY guidance and professional-help flows.',
-
+        'A React Native repair assistant combining OpenAI vision analysis, YOLO object detection and structured safety guardrails.',
       role: 'Full-stack / AI contributor',
-
       stack: [
         'React Native',
-        'Expo',
+        'Redis',
         'Node.js',
         'MongoDB',
         'OpenAI Vision',
         'YOLO'
       ],
-
       link: 'https://github.com/DalbirSodhi',
       linkLabel: 'View contribution',
-
       highlights: [
-        'Worked across mobile UI, backend analysis services and AI-response handling.',
-        'Added confidence, category and severity guardrails for safer predictable responses.',
-        'Connected analysis states to recommendation and emergency UI flows.'
+        'OpenAI multimodal issue analysis',
+        'YOLO-based object detection pipeline',
+        'Guardrails, severity logic and Cache Optimisation'
       ]
     },
 
@@ -201,25 +179,19 @@ export const site = {
       slug: 'meal-explorer',
       visual: 'meals',
       categories: ['Mobile', 'API'],
-
       title: 'Meal Explorer',
       subtitle: 'API-powered food discovery',
-
       description:
         'A multi-screen React Native application for discovering meals by category, fetching remote data and navigating into dynamic detail views.',
-
       role: 'Mobile developer',
-
       stack: [
         'React Native',
         'Expo Router',
         'TheMealDB API',
         'FlatList'
       ],
-
       link: 'https://github.com/DalbirSodhi/Meal-Explorer',
       linkLabel: 'View repository',
-
       highlights: [
         'Built category → list → detail navigation with route parameters.',
         'Used reusable components, loading states and remote API data.',
@@ -231,25 +203,19 @@ export const site = {
       slug: 'mealmate',
       visual: 'planner',
       categories: ['Mobile', 'Data'],
-
       title: 'MealMate',
       subtitle: 'Local-first meal planner',
-
       description:
         'A CRUD-focused mobile application for creating, editing, filtering and managing meal plans with persistent on-device storage.',
-
       role: 'Mobile developer',
-
       stack: [
         'React Native',
         'Expo Router',
         'AsyncStorage',
         'CRUD'
       ],
-
       link: 'https://github.com/DalbirSodhi/MealMate',
       linkLabel: 'View repository',
-
       highlights: [
         'Separated storage operations from UI logic.',
         'Implemented add, edit, delete and detail flows.',
@@ -261,15 +227,11 @@ export const site = {
       slug: 'auth-api',
       visual: 'auth',
       categories: ['Backend', 'Security'],
-
       title: 'Authentication API',
       subtitle: 'JWT + bcrypt protected routes',
-
       description:
         'An Express authentication service demonstrating credential verification, password hashing, signed tokens, bearer authentication and protected endpoints.',
-
       role: 'Backend developer',
-
       stack: [
         'Node.js',
         'Express',
@@ -277,10 +239,8 @@ export const site = {
         'bcrypt',
         'REST'
       ],
-
       link: 'https://github.com/DalbirSodhi/My-Projects',
       linkLabel: 'View GitHub projects',
-
       highlights: [
         'Implemented login and protected-profile request flow.',
         'Verified passwords with bcrypt instead of plain-text storage.',
@@ -292,15 +252,11 @@ export const site = {
       slug: 'cloud-deployment',
       visual: 'cloud',
       categories: ['Backend', 'Cloud'],
-
       title: 'Cloud Deployment',
       subtitle: 'Containerized Node architecture',
-
       description:
         'A deployment workflow combining cloud-hosted Node.js services, Docker, Redis, Apache reverse proxying and Linux server operations on AWS EC2.',
-
       role: 'Backend / cloud developer',
-
       stack: [
         'AWS EC2',
         'Docker',
@@ -309,10 +265,8 @@ export const site = {
         'Apache',
         'PM2'
       ],
-
       link: 'https://github.com/DalbirSodhi/My-Projects',
       linkLabel: 'View GitHub projects',
-
       highlights: [
         'Configured Node services on an EC2 Linux environment.',
         'Worked with Docker Compose and a containerized Redis service.',
@@ -324,25 +278,19 @@ export const site = {
       slug: 'swiftui-students',
       visual: 'swift',
       categories: ['Mobile', 'iOS'],
-
       title: 'SwiftUI Directory',
       subtitle: 'Data-driven native iOS UI',
-
       description:
         'A SwiftUI refactor that replaces repeated hardcoded screens with a Student model, reusable row/detail views and dynamic list rendering.',
-
       role: 'iOS developer',
-
       stack: [
         'Swift',
         'SwiftUI',
         'Identifiable',
         'ForEach'
       ],
-
       link: 'https://github.com/DalbirSodhi/My-Projects',
       linkLabel: 'View GitHub projects',
-
       highlights: [
         'Created a reusable Student data model.',
         'Rendered rows dynamically with ForEach.',
@@ -354,15 +302,11 @@ export const site = {
       slug: 'flutter-mood',
       visual: 'mood',
       categories: ['Mobile', 'Flutter'],
-
       title: 'Flutter Mood Tracker',
       subtitle: 'Stateful mobile interaction',
-
       description:
         'A Flutter learning application focused on widget composition, state updates, navigation and the relationship between Stateful and Stateless UI.',
-
       role: 'Flutter developer',
-
       stack: [
         'Flutter',
         'Dart',
@@ -370,10 +314,8 @@ export const site = {
         'setState',
         'Navigator'
       ],
-
       link: 'https://github.com/DalbirSodhi/My-Projects',
       linkLabel: 'View GitHub projects',
-
       highlights: [
         'Managed UI updates with setState.',
         'Worked with Stateful and Stateless widget responsibilities.',
@@ -389,21 +331,18 @@ export const site = {
         'Additional JavaScript project from my public GitHub work.',
       href: 'https://github.com/DalbirSodhi/Pocket-Mate'
     },
-
     {
       name: 'UNIT-TEST-',
       description:
         'Course project focused on software testing and JavaScript development practice.',
       href: 'https://github.com/DalbirSodhi/UNIT-TEST-'
     },
-
     {
       name: 'My-Projects',
       description:
         'A broader archive of projects and exercises completed during college.',
       href: 'https://github.com/DalbirSodhi/My-Projects'
     },
-
     {
       name: 'interviewPrep',
       description:
@@ -420,7 +359,6 @@ export const site = {
       text:
         'Building projects across mobile development, backend APIs, cloud deployment, security, system design and native application development.'
     },
-
     {
       year: 'Build',
       title: 'Project-driven development',
@@ -428,7 +366,6 @@ export const site = {
       text:
         'Git branching, pull requests, Jira-style tickets, reusable components, API contracts, debugging and iterative product delivery.'
     },
-
     {
       year: 'Foundation',
       title: 'Electrical Engineering',

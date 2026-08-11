@@ -2789,3 +2789,732 @@ body {
   }
 }
 
+/* =========================================================
+   PROJECT MOTION V2 — STRONGER VISUALS + SCROLL ENTRANCE
+   Final overrides only. No grid/card dimensions are changed.
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   SCROLL REVEAL
+   Cards enter with depth, blur and stagger.
+   --------------------------------------------------------- */
+
+.project-reveal {
+  opacity: 0;
+  filter: blur(10px);
+
+  transform:
+    translate3d(0, 72px, 0)
+    scale(.93);
+
+  transform-origin: 50% 70%;
+
+  transition:
+    opacity .78s cubic-bezier(.22, 1, .36, 1),
+    transform .88s cubic-bezier(.16, 1, .3, 1),
+    filter .72s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+
+  will-change: opacity, transform, filter;
+}
+
+.project-reveal-1 {
+  transform:
+    translate3d(-28px, 72px, 0)
+    scale(.93)
+    rotate(-1.2deg);
+}
+
+.project-reveal-2 {
+  transition-delay: 90ms;
+}
+
+.project-reveal-3 {
+  transform:
+    translate3d(28px, 72px, 0)
+    scale(.93)
+    rotate(1.2deg);
+
+  transition-delay: 180ms;
+}
+
+.project-card.project-reveal.visible {
+  opacity: 1;
+  filter: blur(0);
+
+  transform:
+    translate3d(0, 0, 0)
+    scale(1)
+    rotate(0deg);
+}
+
+.project-card.project-reveal.visible:hover {
+  transform:
+    translate3d(0, -7px, 0)
+    scale(1.012);
+
+  border-color: #bbc4ff;
+
+  box-shadow:
+    0 24px 55px rgba(37, 48, 91, .13);
+}
+
+
+/* Start expensive looping motion only after the card is visible. */
+
+.project-card:not(.visible) .project-art * {
+  animation-play-state: paused !important;
+}
+
+
+/* ---------------------------------------------------------
+   GLOBAL ART ENERGY
+   Stronger visual breathing without affecting layout.
+   --------------------------------------------------------- */
+
+.project-card.visible .project-art {
+  animation: projectArtBreathe 6.8s ease-in-out infinite;
+}
+
+.project-card.visible .project-art::after {
+  content: "";
+
+  position: absolute;
+  top: -35%;
+  bottom: -35%;
+  left: -55%;
+
+  width: 38%;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      rgba(255,255,255,0) 20%,
+      rgba(255,255,255,.52) 50%,
+      rgba(255,255,255,0) 80%,
+      transparent 100%
+    );
+
+  transform: skewX(-16deg);
+
+  opacity: 0;
+
+  animation: projectLightSweep 6.2s ease-in-out infinite;
+}
+
+@keyframes projectArtBreathe {
+  0%, 100% {
+    filter: saturate(1) contrast(1);
+  }
+
+  50% {
+    filter: saturate(1.13) contrast(1.025);
+  }
+}
+
+@keyframes projectLightSweep {
+  0%, 28% {
+    left: -55%;
+    opacity: 0;
+  }
+
+  42% {
+    opacity: .72;
+  }
+
+  65% {
+    left: 120%;
+    opacity: 0;
+  }
+
+  100% {
+    left: 120%;
+    opacity: 0;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   1. RENTIQUE — stronger card exchange
+   --------------------------------------------------------- */
+
+.market-one {
+  animation-duration: 4.4s;
+}
+
+.market-two {
+  animation-duration: 4.4s;
+}
+
+.market-auth {
+  animation-duration: 2.8s;
+}
+
+@keyframes rentiqueCardOne {
+  0%, 100% {
+    transform: translate(0, 0) rotate(-5deg) scale(1);
+  }
+
+  48% {
+    transform: translate(8px, -14px) rotate(-1deg) scale(1.055);
+  }
+}
+
+@keyframes rentiqueCardTwo {
+  0%, 100% {
+    transform: translate(0, 0) rotate(7deg) scale(1);
+  }
+
+  48% {
+    transform: translate(-7px, 12px) rotate(2deg) scale(1.05);
+  }
+}
+
+@keyframes rentiqueAuthPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(79,70,229,0);
+  }
+
+  50% {
+    transform: scale(1.085);
+    box-shadow:
+      0 0 0 8px rgba(79,70,229,.08),
+      0 10px 26px rgba(79,70,229,.13);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   2. SHELFSAFE — active dashboard feel
+   --------------------------------------------------------- */
+
+.inventory-bars i {
+  animation-duration: 2.9s;
+}
+
+.expiry-chip {
+  animation-duration: 2.6s;
+}
+
+@keyframes shelfBar {
+  0%, 100% {
+    transform: scaleY(.55);
+    opacity: .55;
+  }
+
+  50% {
+    transform: scaleY(1.06);
+    opacity: 1;
+  }
+}
+
+@keyframes shelfSearch {
+  0%, 100% {
+    transform: translateX(0);
+    box-shadow: inset 0 0 0 0 rgba(15,143,131,0);
+  }
+
+  45% {
+    transform: translateX(3px);
+    box-shadow:
+      inset 0 0 0 2px rgba(15,143,131,.15),
+      0 8px 24px rgba(15,143,131,.09);
+  }
+}
+
+@keyframes shelfExpiry {
+  0%, 65%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  76% {
+    transform: translateY(-8px) scale(1.11);
+  }
+
+  86% {
+    transform: translateY(2px) scale(.98);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   3. FIXBEE — stronger scan / detection cycle
+   --------------------------------------------------------- */
+
+.vision-beam,
+.vision-frame,
+.vision-frame b {
+  animation-duration: 2.45s;
+}
+
+.vision-grid {
+  animation: fixbeeGrid 8s linear infinite;
+}
+
+@keyframes fixbeeScan {
+  0%, 100% {
+    top: 21%;
+    opacity: .3;
+
+    box-shadow:
+      0 0 8px rgba(91,103,241,.2);
+  }
+
+  50% {
+    top: 79%;
+    opacity: 1;
+
+    box-shadow:
+      0 0 26px rgba(91,103,241,.75);
+  }
+}
+
+@keyframes fixbeeFrame {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(.96);
+
+    box-shadow:
+      0 0 0 5px rgba(91,103,241,.04),
+      0 0 0 rgba(91,103,241,0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.045);
+
+    box-shadow:
+      0 0 0 8px rgba(91,103,241,.10),
+      0 0 30px rgba(91,103,241,.22);
+  }
+}
+
+@keyframes fixbeeConfidence {
+  0%, 100% {
+    opacity: .45;
+    transform: translateY(0) scale(.94);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.08);
+  }
+}
+
+@keyframes fixbeeGrid {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 24px 24px;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   4. MEAL EXPLORER — stronger discovery motion
+   --------------------------------------------------------- */
+
+.plate {
+  animation-duration: 4.5s;
+}
+
+.meal-card-a,
+.meal-card-b {
+  animation-duration: 4s;
+}
+
+@keyframes mealPlate {
+  0%, 100% {
+    transform: rotate(-4deg) scale(.98);
+  }
+
+  50% {
+    transform: rotate(5deg) scale(1.07);
+  }
+}
+
+@keyframes mealCardA {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(10px, -13px) rotate(2deg);
+  }
+}
+
+@keyframes mealCardB {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate(-11px, 12px) rotate(-2deg);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   5. MEALMATE — stronger planner interaction
+   --------------------------------------------------------- */
+
+.planner-phone {
+  animation-duration: 5s;
+}
+
+.planner-row {
+  animation-duration: 3.6s;
+}
+
+@keyframes plannerFloat {
+  0%, 100% {
+    transform:
+      translateX(-50%)
+      translateY(0)
+      rotate(-2deg)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translateX(-50%)
+      translateY(-10px)
+      rotate(1deg)
+      scale(1.025);
+  }
+}
+
+@keyframes plannerRow {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: .64;
+  }
+
+  50% {
+    transform: translateX(8px);
+    opacity: 1;
+  }
+}
+
+@keyframes plannerAdd {
+  0%, 100% {
+    transform: scale(1);
+    border-color: #b8d6d6;
+    background: transparent;
+  }
+
+  50% {
+    transform: scale(1.045);
+    border-color: rgba(15,143,131,.58);
+    background: rgba(15,143,131,.07);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   6. AUTH API — stronger token handshake
+   --------------------------------------------------------- */
+
+.auth-lock,
+.token-a,
+.token-b,
+.auth-route {
+  animation-duration: 3.55s;
+}
+
+@keyframes authLock {
+  0%, 100% {
+    transform: translateX(-50%) scale(.96);
+    box-shadow: 0 0 0 rgba(141,102,200,0);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.09);
+
+    box-shadow:
+      0 0 0 8px rgba(141,102,200,.06),
+      0 0 30px rgba(141,102,200,.20);
+  }
+}
+
+@keyframes authTokenStart {
+  0%, 100% {
+    transform: translateX(-5px);
+    opacity: .42;
+  }
+
+  48%, 68% {
+    transform: translateX(18px);
+    opacity: 1;
+  }
+}
+
+@keyframes authTokenBearer {
+  0%, 20%, 100% {
+    transform: translateX(7px);
+    opacity: .4;
+  }
+
+  55%, 82% {
+    transform: translateX(-18px);
+    opacity: 1;
+  }
+}
+
+@keyframes authRoute {
+  0%, 100% {
+    transform: translateX(-50%) scale(.98);
+    box-shadow: 0 0 0 rgba(76,154,106,0);
+  }
+
+  60% {
+    transform: translateX(-50%) scale(1.04);
+
+    box-shadow:
+      0 10px 24px rgba(76,154,106,.13);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   7. CLOUD — visibly flowing request path
+   --------------------------------------------------------- */
+
+.cloud-flow div {
+  animation-duration: 3.8s;
+}
+
+.cloud-flow i {
+  animation-duration: 1.9s;
+}
+
+@keyframes cloudNode {
+  0%, 100% {
+    transform: translateY(0) scale(.98);
+    box-shadow: 0 0 0 rgba(91,103,241,0);
+  }
+
+  50% {
+    transform: translateY(-7px) scale(1.035);
+
+    box-shadow:
+      0 11px 24px rgba(91,103,241,.11);
+  }
+}
+
+@keyframes cloudArrow {
+  0%, 100% {
+    opacity: .22;
+    transform: translateX(-2px) scale(.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(6px) scale(1.18);
+  }
+}
+
+@keyframes cloudChipFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-7px) scale(1.045);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   8. SWIFTUI — stronger row/data motion
+   --------------------------------------------------------- */
+
+.swift-window {
+  animation-duration: 5.2s;
+}
+
+.swift-row {
+  animation-duration: 3.8s;
+}
+
+@keyframes swiftWindow {
+  0%, 100% {
+    transform:
+      translateX(-50%)
+      translateY(0)
+      rotate(2deg)
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translateX(-50%)
+      translateY(-8px)
+      rotate(-1deg)
+      scale(1.025);
+  }
+}
+
+@keyframes swiftRow {
+  0%, 100% {
+    transform: translateX(0);
+    background-color: transparent;
+  }
+
+  50% {
+    transform: translateX(7px);
+    background-color: rgba(229,143,77,.09);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   9. FLUTTER — more expressive mood bubbles
+   --------------------------------------------------------- */
+
+.mood-bubble {
+  animation-duration: 3.8s;
+}
+
+@keyframes moodFloat {
+  0%, 100% {
+    transform:
+      translateY(0)
+      rotate(-2deg)
+      scale(.96);
+  }
+
+  50% {
+    transform:
+      translateY(-14px)
+      rotate(6deg)
+      scale(1.10);
+  }
+}
+
+@keyframes moodCopyPulse {
+  0%, 100% {
+    opacity: .65;
+    transform: translateX(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+   Keep the entrance impactful but remove sideways drift.
+   Internal art remains animated, slightly slower.
+   --------------------------------------------------------- */
+
+@media (max-width: 760px) {
+
+  .project-reveal,
+  .project-reveal-1,
+  .project-reveal-2,
+  .project-reveal-3 {
+    filter: blur(7px);
+
+    transform:
+      translate3d(0, 42px, 0)
+      scale(.96);
+
+    transition-delay: 0ms;
+  }
+
+  .project-reveal-2 {
+    transition-delay: 55ms;
+  }
+
+  .project-reveal-3 {
+    transition-delay: 110ms;
+  }
+
+  .project-card.project-reveal.visible {
+    filter: blur(0);
+
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+
+  .project-card.project-reveal.visible:hover {
+    transform:
+      translate3d(0, -3px, 0)
+      scale(1.004);
+  }
+
+  .project-card.visible .project-art {
+    animation-duration: 8s;
+  }
+
+  .project-card.visible .project-art::after {
+    animation-duration: 7.4s;
+  }
+
+  .market-one,
+  .market-two,
+  .planner-phone,
+  .swift-window,
+  .meal-card-a,
+  .meal-card-b,
+  .mood-bubble,
+  .cloud-chip {
+    animation-duration: 5.6s;
+  }
+
+  .inventory-bars i,
+  .inventory-search,
+  .expiry-chip,
+  .vision-beam,
+  .vision-frame,
+  .vision-frame b,
+  .auth-lock,
+  .token-a,
+  .token-b,
+  .auth-route,
+  .cloud-flow div,
+  .cloud-flow i,
+  .planner-row,
+  .planner-add,
+  .swift-row {
+    animation-duration: 4.6s;
+  }
+}
+
+
+/* ---------------------------------------------------------
+   REDUCED MOTION
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .project-reveal,
+  .project-reveal-1,
+  .project-reveal-2,
+  .project-reveal-3,
+  .project-card.project-reveal.visible {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .project-card.visible .project-art,
+  .project-card.visible .project-art::after,
+  .project-art *,
+  .vision-grid {
+    animation: none !important;
+  }
+}
+

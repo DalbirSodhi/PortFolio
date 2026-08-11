@@ -47,37 +47,21 @@ function Nav() {
 
   return (
     <header className="nav-wrap">
-
-      <a
-        className="brand"
-        href="#top"
-        aria-label="Dalbir Singh, home"
-      >
+      <a className="brand" href="#top" aria-label="Dalbir Singh, home">
         <span className="brand-name">Dalbir Singh</span>
-        
+        <span className="brand-role">Software Developer</span>
       </a>
 
-      <nav
-        className={`nav ${open ? 'nav-open' : ''}`}
-        aria-label="Primary navigation"
-      >
+      <nav className={`nav ${open ? 'nav-open' : ''}`} aria-label="Primary navigation">
         {links.map(([label, href]) => (
-          <a
-            key={href}
-            href={href}
-            onClick={() => setOpen(false)}
-          >
+          <a key={href} href={href} onClick={() => setOpen(false)}>
             {label}
           </a>
         ))}
       </nav>
 
       <div className="nav-actions">
-
-        <span className="availability">
-          <i />
-          {site.availability}
-        </span>
+        <span className="availability"><i /> {site.availability}</span>
 
         <button
           className="menu"
@@ -87,9 +71,7 @@ function Nav() {
           <span />
           <span />
         </button>
-
       </div>
-
     </header>
   );
 }
@@ -103,7 +85,7 @@ function Hero() {
   return (
     <section className="hero section-shell" id="top">
       <div className="hero-copy">
-        <p className="eyebrow reveal">Software Developer</p>
+        <p className="eyebrow reveal">Dalbir Singh · Software Developer</p>
         <h1 className="hero-title reveal delay-1">
           From interface
           <span>to infrastructure.</span>
@@ -277,6 +259,29 @@ function Work() {
   const [expanded, setExpanded] = useState(null);
   const projects = filter === 'All' ? site.projects : site.projects.filter((project) => project.categories.includes(filter));
 
+  useEffect(() => {
+    const cards = document.querySelectorAll('.project-reveal');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.14,
+        rootMargin: '0px 0px -5% 0px'
+      }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, [filter]);
+
   return (
     <section className="work section-shell" id="work">
       <div className="section-heading">
@@ -292,10 +297,15 @@ function Work() {
       </div>
 
       <div className="project-grid">
-        {projects.map((project) => {
+        {projects.map((project, index) => {
           const isOpen = expanded === project.slug;
+          const revealClass = `project-reveal project-reveal-${(index % 3) + 1}`;
+
           return (
-            <article className={`project-card ${isOpen ? 'expanded' : ''}`} key={project.slug}>
+            <article
+              className={`project-card ${revealClass} ${isOpen ? 'expanded' : ''}`}
+              key={project.slug}
+            >
               <ProjectVisual visual={project.visual} title={project.title} />
               <div className="project-card-body">
                 <div className="project-categories">{project.categories.join(' · ')}</div>
@@ -436,11 +446,24 @@ function Contact() {
 export default function Portfolio() {
   useEffect(() => {
     const elements = document.querySelectorAll('.reveal');
+
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('visible')),
-      { threshold: 0.08 }
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.08,
+        rootMargin: '0px 0px -4% 0px'
+      }
     );
+
     elements.forEach((element) => observer.observe(element));
+
     return () => observer.disconnect();
   }, []);
 

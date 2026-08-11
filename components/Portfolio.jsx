@@ -1,0 +1,380 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import { site } from '@/data/site';
+
+const Arrow = ({ diagonal = false }) => (
+  <svg viewBox="0 0 20 20" aria-hidden="true">
+    <path d={diagonal ? 'M5 15 15 5M7 5h8v8' : 'M4 10h12M11 5l5 5-5 5'} />
+  </svg>
+);
+
+const GithubIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className="solid-icon">
+    <path d="M12 2.7a9.5 9.5 0 0 0-3 18.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 0 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 2.9.9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.1-4.7-5.1 0-1.1.4-2 1-2.8-.1-.3-.4-1.3.1-2.8 0 0 .8-.3 2.9 1.1a10 10 0 0 1 5.2 0c2-1.4 2.8-1.1 2.8-1.1.6 1.5.2 2.5.1 2.8.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7 1 .7 1.9v2.6c0 .3.2.6.7.5A9.5 9.5 0 0 0 12 2.7Z" />
+  </svg>
+);
+
+const LinkedInIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className="solid-icon">
+    <path d="M6.7 8.6H3.5V19h3.2V8.6ZM5.1 3.5a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Zm13.8 9.6c0-3.1-1.7-4.8-4-4.8-1.8 0-2.7 1-3.1 1.7V8.6H8.6V19h3.2v-5.2c0-1.4.3-2.7 2-2.7 1.7 0 1.7 1.6 1.7 2.8V19h3.2l.2-5.9Z" />
+  </svg>
+);
+
+function AmbientCursor() {
+  useEffect(() => {
+    const root = document.documentElement;
+    const move = (event) => {
+      root.style.setProperty('--mx', `${event.clientX}px`);
+      root.style.setProperty('--my', `${event.clientY}px`);
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    return () => window.removeEventListener('pointermove', move);
+  }, []);
+  return null;
+}
+
+function Nav() {
+  const [open, setOpen] = useState(false);
+  const links = [
+    ['Projects', '#work'],
+    ['Stack', '#stack'],
+    ['Journey', '#journey'],
+    ['About', '#about'],
+    ['Contact', '#contact']
+  ];
+
+  return (
+    <header className="nav-wrap">
+      <a className="brand" href="#top" aria-label="Dalbir Singh, home">DS</a>
+      <nav className={`nav ${open ? 'nav-open' : ''}`} aria-label="Primary navigation">
+        {links.map(([label, href]) => (
+          <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
+        ))}
+      </nav>
+      <div className="nav-actions">
+        <span className="availability"><i /> {site.availability}</span>
+        <button className="menu" onClick={() => setOpen((value) => !value)} aria-label="Toggle navigation">
+          <span /><span />
+        </button>
+      </div>
+    </header>
+  );
+}
+
+function Hero() {
+  const socialLinks = useMemo(() => [
+    site.links.github && { label: 'GitHub', href: site.links.github, icon: <GithubIcon /> },
+    site.links.linkedin && { label: 'LinkedIn', href: site.links.linkedin, icon: <LinkedInIcon /> }
+  ].filter(Boolean), []);
+
+  return (
+    <section className="hero section-shell" id="top">
+      <div className="hero-copy">
+        <p className="eyebrow reveal">Dalbir Singh / Software Developer</p>
+        <h1 className="hero-title reveal delay-1">
+          From interface
+          <span>to infrastructure.</span>
+        </h1>
+        <p className="hero-lede reveal delay-2">{site.intro}</p>
+        <div className="hero-actions reveal delay-3">
+          <a className="button button-primary" href="#work">Explore my work <Arrow /></a>
+          <a className="button button-ghost" href="#about">About me <Arrow diagonal /></a>
+        </div>
+        {socialLinks.length > 0 && (
+          <div className="social-row">
+            {socialLinks.map((link) => (
+              <a key={link.label} href={link.href} target="_blank" rel="noreferrer" aria-label={link.label}>{link.icon}</a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="hero-visual reveal delay-2" aria-label="Developer profile visual">
+        <div className="profile-orbit orbit-a" />
+        <div className="profile-orbit orbit-b" />
+        <div className="hero-card">
+          <div className="portrait-frame">
+            {site.portrait ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={site.portrait} alt="Dalbir Singh" />
+            ) : (
+              <div className="monogram">
+                <span>{site.initials}</span>
+                <small>Your photo goes here</small>
+              </div>
+            )}
+          </div>
+          <div className="hero-card-meta"><span>DALBIR / DEV</span><span>BC / CANADA</span></div>
+        </div>
+        <div className="skill-node node-mobile"><b>01</b><span>Mobile</span></div>
+        <div className="skill-node node-backend"><b>02</b><span>Backend</span></div>
+        <div className="skill-node node-cloud"><b>03</b><span>Cloud</span></div>
+        <div className="skill-node node-ai"><b>04</b><span>Applied AI</span></div>
+      </div>
+
+      <div className="hero-bottom reveal delay-3">
+        <span>React Native</span><i />
+        <span>Node.js</span><i />
+        <span>Cloud</span><i />
+        <span>AI</span>
+      </div>
+    </section>
+  );
+}
+
+function Marquee() {
+  const items = ['React Native', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Redis', 'SwiftUI', 'Flutter', 'Docker', 'AWS', 'OpenAI Vision', 'REST APIs'];
+  return (
+    <div className="marquee" aria-label="Technologies">
+      <div className="marquee-track">
+        {[...items, ...items].map((item, index) => <span key={`${item}-${index}`}>{item}<i>✦</i></span>)}
+      </div>
+    </div>
+  );
+}
+
+function ProjectVisual({ visual, title }) {
+  if (visual === 'vision') {
+    return (
+      <div className="project-art art-vision">
+        <div className="vision-grid" />
+        <div className="vision-frame"><span>SCAN</span><b>94%</b></div>
+        <div className="vision-pipe pipe-v" /><div className="vision-pipe pipe-h" />
+        <div className="vision-beam" />
+        <div className="art-caption"><span>IMAGE ANALYSIS</span><b>AI / CV</b></div>
+      </div>
+    );
+  }
+  if (visual === 'meals') {
+    return (
+      <div className="project-art art-meals">
+        <div className="meal-orbit"><div className="plate"><i /><i /><i /></div></div>
+        <div className="meal-card meal-card-a"><span>CHICKEN</span><b>12 meals</b></div>
+        <div className="meal-card meal-card-b"><span>VEGETARIAN</span><b>Browse →</b></div>
+        <div className="art-caption"><span>REMOTE DATA</span><b>API / RN</b></div>
+      </div>
+    );
+  }
+  if (visual === 'planner') {
+    return (
+      <div className="project-art art-planner">
+        <div className="planner-phone">
+          <span className="phone-top">TODAY</span>
+          {['Breakfast', 'Lunch', 'Dinner'].map((meal, index) => <div className="planner-row" key={meal}><i>{index + 1}</i><span>{meal}</span><b>•••</b></div>)}
+          <div className="planner-add">＋ Add meal</div>
+        </div>
+        <div className="art-caption"><span>LOCAL STORAGE</span><b>CRUD</b></div>
+      </div>
+    );
+  }
+  if (visual === 'auth') {
+    return (
+      <div className="project-art art-auth">
+        <div className="auth-lock"><span>•</span></div>
+        <div className="token token-a">eyJhbGciOiJIUzI1NiJ9</div>
+        <div className="token token-b">Authorization: Bearer •••••</div>
+        <div className="auth-route"><span>POST /login</span><b>200</b></div>
+        <div className="art-caption"><span>PROTECTED ROUTES</span><b>JWT / BCRYPT</b></div>
+      </div>
+    );
+  }
+  if (visual === 'cloud') {
+    return (
+      <div className="project-art art-cloud">
+        <div className="cloud-flow">
+          <div><span>01</span><b>Internet</b></div><i>→</i>
+          <div><span>02</span><b>Apache</b></div><i>→</i>
+          <div><span>03</span><b>Docker</b></div><i>→</i>
+          <div><span>04</span><b>Node</b></div>
+        </div>
+        <div className="cloud-chip">AWS / EC2</div>
+        <div className="cloud-chip chip-redis">REDIS</div>
+        <div className="art-caption"><span>DEPLOYMENT</span><b>CLOUD</b></div>
+      </div>
+    );
+  }
+  if (visual === 'swift') {
+    return (
+      <div className="project-art art-swift">
+        <div className="swift-window">
+          <div className="swift-title">Students</div>
+          {['Alice', 'Brian', 'Cindy'].map((name, index) => <div className="swift-row" key={name}><i>{name[0]}</i><div><b>{name}</b><span>{index === 0 ? 'Mobile Development' : index === 1 ? 'Web Development' : 'UI Development'}</span></div><em>›</em></div>)}
+        </div>
+        <div className="art-caption"><span>DATA-DRIVEN UI</span><b>SWIFTUI</b></div>
+      </div>
+    );
+  }
+  if (visual === 'mood') {
+    return (
+      <div className="project-art art-mood">
+        <div className="mood-copy"><span>HOW ARE YOU?</span><b>Pick a mood.</b></div>
+        <div className="mood-bubble bubble-1">🙂</div><div className="mood-bubble bubble-2">😌</div><div className="mood-bubble bubble-3">😶</div><div className="mood-bubble bubble-4">😵</div>
+        <div className="art-caption"><span>STATE + NAVIGATION</span><b>FLUTTER</b></div>
+      </div>
+    );
+  }
+  return <div className="project-art"><span>{title}</span></div>;
+}
+
+function Work() {
+  const filters = ['All', 'Mobile', 'Backend', 'Cloud', 'AI'];
+  const [filter, setFilter] = useState('All');
+  const [expanded, setExpanded] = useState(null);
+  const projects = filter === 'All' ? site.projects : site.projects.filter((project) => project.categories.includes(filter));
+
+  return (
+    <section className="work section-shell" id="work">
+      <div className="section-heading">
+        <div>
+          <p className="eyebrow">01 / Project Archive</p>
+          <h2>A portfolio,<br />not one project.</h2>
+        </div>
+        <p>Selected work across mobile apps, backend systems, APIs, cloud deployment, native development and applied AI.</p>
+      </div>
+
+      <div className="filter-row" aria-label="Filter projects">
+        {filters.map((item) => <button key={item} className={filter === item ? 'active' : ''} onClick={() => setFilter(item)}>{item}</button>)}
+      </div>
+
+      <div className="project-grid">
+        {projects.map((project, index) => {
+          const isOpen = expanded === project.slug;
+          return (
+            <article className={`project-card ${isOpen ? 'expanded' : ''}`} key={project.slug}>
+              <ProjectVisual visual={project.visual} title={project.title} />
+              <div className="project-card-body">
+                <div className="project-index"><span>{String(site.projects.indexOf(project) + 1).padStart(2, '0')}</span><span>{project.categories.join(' / ')}</span></div>
+                <h3>{project.title}</h3>
+                <p className="project-subtitle">{project.subtitle}</p>
+                <p className="project-description">{project.description}</p>
+                <div className="tag-row">{project.stack.slice(0, 5).map((tag) => <span key={tag}>{tag}</span>)}</div>
+                <button className="project-toggle" onClick={() => setExpanded(isOpen ? null : project.slug)} aria-expanded={isOpen}>
+                  {isOpen ? 'Close details' : 'View contribution'} <Arrow diagonal={!isOpen} />
+                </button>
+                <div className="project-extra">
+                  <div className="project-role"><span>Role</span><b>{project.role}</b></div>
+                  <ul>{project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>
+                </div>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function Stack() {
+  return (
+    <section className="stack section-shell" id="stack">
+      <div className="section-heading compact">
+        <div><p className="eyebrow">02 / Technical Range</p><h2>Across the stack.<br />Connected by systems thinking.</h2></div>
+      </div>
+      <div className="capability-grid">
+        {site.capabilities.map((capability) => (
+          <article className="capability-card reveal" key={capability.number}>
+            <div className="capability-top"><span>{capability.number}</span><i>↗</i></div>
+            <h3>{capability.title}</h3>
+            <p>{capability.text}</p>
+            <div className="tag-row subtle">{capability.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Journey() {
+  return (
+    <section className="journey" id="journey">
+      <div className="section-shell journey-inner">
+        <div className="journey-heading">
+          <p className="eyebrow">03 / Journey</p>
+          <h2>Engineering roots.<br />Software direction.</h2>
+          <p>My path gives me a practical way of thinking: understand the system, isolate the problem, then build the cleanest solution.</p>
+        </div>
+        <div className="timeline">
+          {site.journey.map((item, index) => (
+            <article className="timeline-item reveal" key={item.year}>
+              <span className="timeline-num">0{index + 1}</span>
+              <div><p>{item.year}</p><h3>{item.title}</h3><b>{item.place}</b><span>{item.text}</span></div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <section className="about section-shell" id="about">
+      <div className="about-grid">
+        <div className="about-heading">
+          <p className="eyebrow">04 / About</p>
+          <h2>I like software that is clear on the surface and solid underneath.</h2>
+        </div>
+        <div className="about-copy">
+          <p className="about-lede">{site.headline}</p>
+          <p>I enjoy moving between UI, data flow and backend behavior instead of treating them as isolated pieces. That means thinking about what the user sees, what the API guarantees and what happens when the happy path breaks.</p>
+          <p>My current work spans team projects and individual builds across React Native, Node.js, cloud deployment, native mobile development and AI-assisted product features.</p>
+        </div>
+      </div>
+      <div className="principle-strip">
+        {['Build the flow', 'Understand the data', 'Handle failure states', 'Ship with clarity'].map((item, index) => <div key={item}><span>0{index + 1}</span><b>{item}</b></div>)}
+      </div>
+    </section>
+  );
+}
+
+function Contact() {
+  const emailHref = site.links.email ? `mailto:${site.links.email}` : '#top';
+  return (
+    <section className="contact" id="contact">
+      <div className="contact-grid" />
+      <div className="section-shell contact-inner">
+        <p className="eyebrow">05 / Contact</p>
+        <h2>Let’s build something<br /><span>worth shipping.</span></h2>
+        <p>Open to software development opportunities across full-stack, mobile and backend-focused roles.</p>
+        {site.links.email ? <a className="button button-dark" href={emailHref}>Email Dalbir <Arrow diagonal /></a> : <div className="contact-placeholder">Contact links are ready — add your email, GitHub and LinkedIn in <code>data/site.js</code>.</div>}
+        <footer>
+          <div><b>{site.name}</b><span>{site.role} · {site.location}</span></div>
+          <div className="footer-links">
+            {site.links.github && <a href={site.links.github}>GitHub</a>}
+            {site.links.linkedin && <a href={site.links.linkedin}>LinkedIn</a>}
+            {site.links.resume && <a href={site.links.resume}>Résumé</a>}
+          </div>
+          <span>© 2026 / Portfolio</span>
+        </footer>
+      </div>
+    </section>
+  );
+}
+
+export default function Portfolio() {
+  useEffect(() => {
+    const elements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('visible')),
+      { threshold: 0.08 }
+    );
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <main>
+      <AmbientCursor />
+      <div className="ambient" aria-hidden="true" />
+      <Nav />
+      <Hero />
+      <Marquee />
+      <Work />
+      <Stack />
+      <Journey />
+      <About />
+      <Contact />
+    </main>
+  );
+}

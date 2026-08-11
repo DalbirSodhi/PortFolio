@@ -36,6 +36,7 @@ function AmbientCursor() {
 
 function Nav() {
   const [open, setOpen] = useState(false);
+
   const links = [
     ['Projects', '#work'],
     ['Stack', '#stack'],
@@ -46,18 +47,49 @@ function Nav() {
 
   return (
     <header className="nav-wrap">
-      <a className="brand" href="#top" aria-label="Dalbir Singh, home">DS</a>
-      <nav className={`nav ${open ? 'nav-open' : ''}`} aria-label="Primary navigation">
+
+      <a
+        className="brand"
+        href="#top"
+        aria-label="Dalbir Singh, home"
+      >
+        <span className="brand-name">Dalbir Singh</span>
+        
+      </a>
+
+      <nav
+        className={`nav ${open ? 'nav-open' : ''}`}
+        aria-label="Primary navigation"
+      >
         {links.map(([label, href]) => (
-          <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>
+          <a
+            key={href}
+            href={href}
+            onClick={() => setOpen(false)}
+          >
+            {label}
+          </a>
         ))}
       </nav>
+
       <div className="nav-actions">
-        <span className="availability"><i /> {site.availability}</span>
-        <button className="menu" onClick={() => setOpen((value) => !value)} aria-label="Toggle navigation">
-          <span /><span />
+
+        <span className="availability">
+          <i />
+          {site.availability}
+        </span>
+
+        <button
+          className="menu"
+          onClick={() => setOpen((value) => !value)}
+          aria-label="Toggle navigation"
+        >
+          <span />
+          <span />
         </button>
+
       </div>
+
     </header>
   );
 }
@@ -71,7 +103,7 @@ function Hero() {
   return (
     <section className="hero section-shell" id="top">
       <div className="hero-copy">
-        <p className="eyebrow reveal">Dalbir Singh / Software Developer</p>
+        <p className="eyebrow reveal">Software Developer</p>
         <h1 className="hero-title reveal delay-1">
           From interface
           <span>to infrastructure.</span>
@@ -79,15 +111,16 @@ function Hero() {
         <p className="hero-lede reveal delay-2">{site.intro}</p>
         <div className="hero-actions reveal delay-3">
           <a className="button button-primary" href="#work">Explore my work <Arrow /></a>
-          <a className="button button-ghost" href="#about">About me <Arrow diagonal /></a>
+          <a className="button button-ghost" href="#stack">Technical stack <Arrow diagonal /></a>
         </div>
-        {socialLinks.length > 0 && (
-          <div className="social-row">
-            {socialLinks.map((link) => (
-              <a key={link.label} href={link.href} target="_blank" rel="noreferrer" aria-label={link.label}>{link.icon}</a>
-            ))}
-          </div>
-        )}
+        <div className="social-row reveal delay-3">
+          {socialLinks.map((link) => (
+            <a key={link.label} href={link.href} target="_blank" rel="noreferrer" aria-label={link.label}>{link.icon}</a>
+          ))}
+          {site.links.source && (
+            <a className="source-link" href={site.links.source} target="_blank" rel="noreferrer">Portfolio source ↗</a>
+          )}
+        </div>
       </div>
 
       <div className="hero-visual reveal delay-2" aria-label="Developer profile visual">
@@ -107,15 +140,16 @@ function Hero() {
           </div>
           <div className="hero-card-meta"><span>DALBIR / DEV</span><span>BC / CANADA</span></div>
         </div>
-        <div className="skill-node node-mobile"><b>01</b><span>Mobile</span></div>
-        <div className="skill-node node-backend"><b>02</b><span>Backend</span></div>
-        <div className="skill-node node-cloud"><b>03</b><span>Cloud</span></div>
-        <div className="skill-node node-ai"><b>04</b><span>Applied AI</span></div>
+        <div className="skill-node node-mobile"><span>Frontend + Mobile</span></div>
+        <div className="skill-node node-backend"><span>Backend APIs</span></div>
+        <div className="skill-node node-cloud"><span>System Design</span></div>
+        <div className="skill-node node-ai"><span>Cloud + AI</span></div>
       </div>
 
       <div className="hero-bottom reveal delay-3">
         <span>React Native</span><i />
         <span>Node.js</span><i />
+        <span>System Design</span><i />
         <span>Cloud</span><i />
         <span>AI</span>
       </div>
@@ -124,7 +158,7 @@ function Hero() {
 }
 
 function Marquee() {
-  const items = ['React Native', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Redis', 'SwiftUI', 'Flutter', 'Docker', 'AWS', 'OpenAI Vision', 'REST APIs'];
+  const items = ['React Native', 'React', 'Expo', 'Node.js', 'Express', 'MongoDB', 'Firebase', 'System Design', 'REST APIs', 'Docker', 'AWS', 'SwiftUI', 'Flutter', 'OpenAI Vision'];
   return (
     <div className="marquee" aria-label="Technologies">
       <div className="marquee-track">
@@ -135,6 +169,26 @@ function Marquee() {
 }
 
 function ProjectVisual({ visual, title }) {
+  if (visual === 'marketplace') {
+    return (
+      <div className="project-art art-marketplace">
+        <div className="market-card market-one"><span>RENT</span><b>Jacket</b></div>
+        <div className="market-card market-two"><span>BUY</span><b>Style</b></div>
+        <div className="market-auth">Firebase Auth ✓</div>
+        <div className="art-caption"><span>MARKETPLACE</span><b>WEB / FIREBASE</b></div>
+      </div>
+    );
+  }
+  if (visual === 'inventory') {
+    return (
+      <div className="project-art art-inventory">
+        <div className="inventory-bars"><i /><i /><i /><i /></div>
+        <div className="inventory-search">Search products...</div>
+        <div className="expiry-chip">Expiry alerts</div>
+        <div className="art-caption"><span>INVENTORY</span><b>MERN / JWT</b></div>
+      </div>
+    );
+  }
   if (visual === 'vision') {
     return (
       <div className="project-art art-vision">
@@ -161,7 +215,7 @@ function ProjectVisual({ visual, title }) {
       <div className="project-art art-planner">
         <div className="planner-phone">
           <span className="phone-top">TODAY</span>
-          {['Breakfast', 'Lunch', 'Dinner'].map((meal, index) => <div className="planner-row" key={meal}><i>{index + 1}</i><span>{meal}</span><b>•••</b></div>)}
+          {['Breakfast', 'Lunch', 'Dinner'].map((meal) => <div className="planner-row" key={meal}><span>{meal}</span><b>•••</b></div>)}
           <div className="planner-add">＋ Add meal</div>
         </div>
         <div className="art-caption"><span>LOCAL STORAGE</span><b>CRUD</b></div>
@@ -183,10 +237,10 @@ function ProjectVisual({ visual, title }) {
     return (
       <div className="project-art art-cloud">
         <div className="cloud-flow">
-          <div><span>01</span><b>Internet</b></div><i>→</i>
-          <div><span>02</span><b>Apache</b></div><i>→</i>
-          <div><span>03</span><b>Docker</b></div><i>→</i>
-          <div><span>04</span><b>Node</b></div>
+          <div><b>Internet</b></div><i>→</i>
+          <div><b>Apache</b></div><i>→</i>
+          <div><b>Docker</b></div><i>→</i>
+          <div><b>Node</b></div>
         </div>
         <div className="cloud-chip">AWS / EC2</div>
         <div className="cloud-chip chip-redis">REDIS</div>
@@ -199,7 +253,7 @@ function ProjectVisual({ visual, title }) {
       <div className="project-art art-swift">
         <div className="swift-window">
           <div className="swift-title">Students</div>
-          {['Alice', 'Brian', 'Cindy'].map((name, index) => <div className="swift-row" key={name}><i>{name[0]}</i><div><b>{name}</b><span>{index === 0 ? 'Mobile Development' : index === 1 ? 'Web Development' : 'UI Development'}</span></div><em>›</em></div>)}
+          {['Alice', 'Brian', 'Cindy'].map((name) => <div className="swift-row" key={name}><i>{name[0]}</i><div><b>{name}</b><span>Development</span></div><em>›</em></div>)}
         </div>
         <div className="art-caption"><span>DATA-DRIVEN UI</span><b>SWIFTUI</b></div>
       </div>
@@ -209,7 +263,7 @@ function ProjectVisual({ visual, title }) {
     return (
       <div className="project-art art-mood">
         <div className="mood-copy"><span>HOW ARE YOU?</span><b>Pick a mood.</b></div>
-        <div className="mood-bubble bubble-1">🙂</div><div className="mood-bubble bubble-2">😌</div><div className="mood-bubble bubble-3">😶</div><div className="mood-bubble bubble-4">😵</div>
+        <div className="mood-bubble bubble-1">🙂</div><div className="mood-bubble bubble-2">😌</div><div className="mood-bubble bubble-3">😶</div>
         <div className="art-caption"><span>STATE + NAVIGATION</span><b>FLUTTER</b></div>
       </div>
     );
@@ -218,7 +272,7 @@ function ProjectVisual({ visual, title }) {
 }
 
 function Work() {
-  const filters = ['All', 'Mobile', 'Backend', 'Cloud', 'AI'];
+  const filters = ['All', 'Web', 'Mobile', 'Backend', 'Cloud', 'AI'];
   const [filter, setFilter] = useState('All');
   const [expanded, setExpanded] = useState(null);
   const projects = filter === 'All' ? site.projects : site.projects.filter((project) => project.categories.includes(filter));
@@ -227,10 +281,10 @@ function Work() {
     <section className="work section-shell" id="work">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">01 / Project Archive</p>
-          <h2>A portfolio,<br />not one project.</h2>
+          <p className="eyebrow">Project Archive</p>
+          <h2>Work across the stack.</h2>
         </div>
-        <p>Selected work across mobile apps, backend systems, APIs, cloud deployment, native development and applied AI.</p>
+        <p>A curated selection of team and individual work across web, mobile, backend systems, cloud deployment, native development and applied AI.</p>
       </div>
 
       <div className="filter-row" aria-label="Filter projects">
@@ -238,20 +292,23 @@ function Work() {
       </div>
 
       <div className="project-grid">
-        {projects.map((project, index) => {
+        {projects.map((project) => {
           const isOpen = expanded === project.slug;
           return (
             <article className={`project-card ${isOpen ? 'expanded' : ''}`} key={project.slug}>
               <ProjectVisual visual={project.visual} title={project.title} />
               <div className="project-card-body">
-                <div className="project-index"><span>{String(site.projects.indexOf(project) + 1).padStart(2, '0')}</span><span>{project.categories.join(' / ')}</span></div>
+                <div className="project-categories">{project.categories.join(' · ')}</div>
                 <h3>{project.title}</h3>
                 <p className="project-subtitle">{project.subtitle}</p>
                 <p className="project-description">{project.description}</p>
-                <div className="tag-row">{project.stack.slice(0, 5).map((tag) => <span key={tag}>{tag}</span>)}</div>
-                <button className="project-toggle" onClick={() => setExpanded(isOpen ? null : project.slug)} aria-expanded={isOpen}>
-                  {isOpen ? 'Close details' : 'View contribution'} <Arrow diagonal={!isOpen} />
-                </button>
+                <div className="tag-row">{project.stack.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}</div>
+                <div className="project-actions">
+                  <a className="project-link" href={project.link} target="_blank" rel="noreferrer">{project.linkLabel} <Arrow diagonal /></a>
+                  <button className="project-toggle" onClick={() => setExpanded(isOpen ? null : project.slug)} aria-expanded={isOpen}>
+                    {isOpen ? 'Less' : 'Details'}
+                  </button>
+                </div>
                 <div className="project-extra">
                   <div className="project-role"><span>Role</span><b>{project.role}</b></div>
                   <ul>{project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul>
@@ -261,6 +318,26 @@ function Work() {
           );
         })}
       </div>
+
+      <div className="github-more">
+        <div className="github-more-heading">
+          <div>
+            <p className="eyebrow">More on GitHub</p>
+            <h3>More code, less homepage scroll.</h3>
+          </div>
+          <a href={site.links.github} target="_blank" rel="noreferrer">View full GitHub <Arrow diagonal /></a>
+        </div>
+        <div className="repo-strip">
+          {site.githubProjects.map((repo) => (
+            <a className="repo-card" href={repo.href} target="_blank" rel="noreferrer" key={repo.name}>
+              <div><GithubIcon /><span>Public repo</span></div>
+              <h4>{repo.name}</h4>
+              <p>{repo.description}</p>
+              <b>Open repository ↗</b>
+            </a>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
@@ -269,12 +346,13 @@ function Stack() {
   return (
     <section className="stack section-shell" id="stack">
       <div className="section-heading compact">
-        <div><p className="eyebrow">02 / Technical Range</p><h2>Across the stack.<br />Connected by systems thinking.</h2></div>
+        <div><p className="eyebrow">Technical Range</p><h2>Across the stack.<br />Connected by systems thinking.</h2></div>
+        <p>Not just a list of tools — these are the areas I have been building and learning through real coursework, team products and individual projects.</p>
       </div>
       <div className="capability-grid">
         {site.capabilities.map((capability) => (
-          <article className="capability-card reveal" key={capability.number}>
-            <div className="capability-top"><span>{capability.number}</span><i>↗</i></div>
+          <article className="capability-card reveal" key={capability.title}>
+            <div className="capability-top"><span>{capability.title.split(' ')[0]}</span><i>↗</i></div>
             <h3>{capability.title}</h3>
             <p>{capability.text}</p>
             <div className="tag-row subtle">{capability.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
@@ -290,14 +368,13 @@ function Journey() {
     <section className="journey" id="journey">
       <div className="section-shell journey-inner">
         <div className="journey-heading">
-          <p className="eyebrow">03 / Journey</p>
+          <p className="eyebrow">Journey</p>
           <h2>Engineering roots.<br />Software direction.</h2>
           <p>My path gives me a practical way of thinking: understand the system, isolate the problem, then build the cleanest solution.</p>
         </div>
         <div className="timeline">
-          {site.journey.map((item, index) => (
+          {site.journey.map((item) => (
             <article className="timeline-item reveal" key={item.year}>
-              <span className="timeline-num">0{index + 1}</span>
               <div><p>{item.year}</p><h3>{item.title}</h3><b>{item.place}</b><span>{item.text}</span></div>
             </article>
           ))}
@@ -312,40 +389,44 @@ function About() {
     <section className="about section-shell" id="about">
       <div className="about-grid">
         <div className="about-heading">
-          <p className="eyebrow">04 / About</p>
+          <p className="eyebrow">About</p>
           <h2>I like software that is clear on the surface and solid underneath.</h2>
         </div>
         <div className="about-copy">
           <p className="about-lede">{site.headline}</p>
-          <p>I enjoy moving between UI, data flow and backend behavior instead of treating them as isolated pieces. That means thinking about what the user sees, what the API guarantees and what happens when the happy path breaks.</p>
-          <p>My current work spans team projects and individual builds across React Native, Node.js, cloud deployment, native mobile development and AI-assisted product features.</p>
+          <p>I enjoy moving between UI, data flow, backend behavior and system architecture instead of treating them as isolated pieces. That means thinking about what the user sees, what the API guarantees and what happens when the happy path breaks.</p>
+          <p>My current work spans team projects and individual builds across React Native, React, Node.js, cloud deployment, native mobile development and AI-assisted product features.</p>
         </div>
       </div>
       <div className="principle-strip">
-        {['Build the flow', 'Understand the data', 'Handle failure states', 'Ship with clarity'].map((item, index) => <div key={item}><span>0{index + 1}</span><b>{item}</b></div>)}
+        {['Build the flow', 'Understand the data', 'Design the system', 'Handle failure states', 'Ship with clarity'].map((item) => <div key={item}><b>{item}</b></div>)}
       </div>
     </section>
   );
 }
 
 function Contact() {
-  const emailHref = site.links.email ? `mailto:${site.links.email}` : '#top';
+  const emailHref = site.links.email ? `mailto:${site.links.email}` : null;
   return (
     <section className="contact" id="contact">
       <div className="contact-grid" />
       <div className="section-shell contact-inner">
-        <p className="eyebrow">05 / Contact</p>
+        <p className="eyebrow">Contact</p>
         <h2>Let’s build something<br /><span>worth shipping.</span></h2>
         <p>Open to software development opportunities across full-stack, mobile and backend-focused roles.</p>
-        {site.links.email ? <a className="button button-dark" href={emailHref}>Email Dalbir <Arrow diagonal /></a> : <div className="contact-placeholder">Contact links are ready — add your email, GitHub and LinkedIn in <code>data/site.js</code>.</div>}
+        <div className="contact-actions">
+          {emailHref && <a className="button button-dark" href={emailHref}>Email Dalbir <Arrow diagonal /></a>}
+          <a className="button button-light" href={site.links.linkedin} target="_blank" rel="noreferrer">LinkedIn <Arrow diagonal /></a>
+          <a className="button button-light" href={site.links.github} target="_blank" rel="noreferrer">GitHub <Arrow diagonal /></a>
+        </div>
         <footer>
           <div><b>{site.name}</b><span>{site.role} · {site.location}</span></div>
           <div className="footer-links">
-            {site.links.github && <a href={site.links.github}>GitHub</a>}
-            {site.links.linkedin && <a href={site.links.linkedin}>LinkedIn</a>}
+            <a href={site.links.github} target="_blank" rel="noreferrer">GitHub</a>
+            <a href={site.links.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
             {site.links.resume && <a href={site.links.resume}>Résumé</a>}
           </div>
-          <span>© 2026 / Portfolio</span>
+          <span>© 2026 · Portfolio</span>
         </footer>
       </div>
     </section>

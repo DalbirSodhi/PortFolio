@@ -3,10 +3,10 @@ import './globals.css';
 export const metadata = {
   title: 'Dalbir Singh — Software Developer',
   description:
-    'Portfolio of Dalbir Singh — software developer building mobile apps, backend systems, cloud deployments and applied AI products.',
+    'Portfolio of Dalbir Singh — software developer building web and mobile products, backend systems, system architecture, cloud deployments and applied AI experiences.',
   openGraph: {
     title: 'Dalbir Singh — Software Developer',
-    description: 'Projects across mobile, backend, cloud and applied AI.',
+    description: 'Projects across web, mobile, backend, system design, cloud and applied AI.',
     type: 'website'
   }
 };

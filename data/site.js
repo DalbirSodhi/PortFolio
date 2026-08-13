@@ -16,7 +16,7 @@ export const site = {
     source: 'https://github.com/DalbirSodhi/Portfolio'
   },
 
-  portrait: '/Dalbir.png',
+  portrait: '/Dalbir.jpg',
 
   disciplines: [
     'Frontend & Mobile',
